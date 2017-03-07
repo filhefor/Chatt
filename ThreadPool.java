@@ -23,13 +23,17 @@ public class ThreadPool {
 		}
 
 	}
+	
 	public void execute(Runnable runnable){
 		buffer.put(runnable);
 	}
 
 	private class Buffer<T> {
 		private LinkedList<T> buffer = new LinkedList<T>();
-
+/**
+ * Puts a thread last in the thread pool
+ * @param generic type (T) object
+ */
 		public synchronized void put(T obj) {
 			buffer.addLast(obj);
 			notifyAll();
@@ -67,6 +71,7 @@ public class ThreadPool {
 					buffer.get().run();
 				} catch (InterruptedException interruptedException) {
 					interruptedException.printStackTrace();
+					System.out.println("InterruptedException in run method in Worker Class");
 					break;
 				}
 			}

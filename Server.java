@@ -12,8 +12,6 @@ public class Server {
 	private ObjectInputStream input;
 	private Socket connection;
 	private Object objectToSend;
-	private Buffer<Runnable> buffer = new Buffer<Runnable>();
-	private LinkedList<T> threadPool = new LinkedList<T>();
 	
 	public Server(int port) throws IOException {
 		server= new ServerSocket(port, 100);
@@ -28,17 +26,20 @@ public class Server {
 					setupStreams();
 				}catch(EOFException eofException){
 					eofException.printStackTrace();
+					System.out.println("EOFException in startRunning method");
 				}
 			}
 		}catch (IOException ioException){
 			ioException.printStackTrace();
+			System.out.println("IOException in startRunning method");
 		}
 	}
 	public void setupStreams() throws IOException{
+		System.out.println("Server running, waiting for connection...");
 		output = new ObjectOutputStream(connection.getOutputStream());
 		output.flush();
 		input = new ObjectInputStream(connection.getInputStream());
-		System.out.println("Server running, streams connected");
+		System.out.println("Streams connected");
 	}
 
 
@@ -72,7 +73,7 @@ public class Server {
 //	}
 
 	public static void main(String[] args) throws IOException {
-		new Server(3520);
+		new Server(1337);
 	}
 
 }
