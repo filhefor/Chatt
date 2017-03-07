@@ -12,7 +12,6 @@ public class Server {
 	private ObjectInputStream input;
 	private Socket connection;
 	private Object objectToSend;
-
 	private Thread serverThread = new ClientHandler();
 
 	
@@ -42,8 +41,8 @@ public class Server {
 		output = new ObjectOutputStream(connection.getOutputStream());
 		output.flush();
 		input = new ObjectInputStream(connection.getInputStream());
-
 		System.out.println("Streams connected");
+		serverThread.start();
 
 	}
 
@@ -53,14 +52,17 @@ public class Server {
 		
 		public void run() {
 			Object outputObject, inputObject;
-			 while(true){
+			 while(!Thread.interrupted()){
 				 try{
 					 inputObject = input.readObject();
+					 if(inputObject!=null){
 					 //System.out.println(inputObject.toString());
 					 output.writeObject("SERVER- "+inputObject);
 					 output.flush();
+					 }
 				 }catch(IOException | ClassNotFoundException e){
-					 System.out.println(e.getMessage());
+					 System.out.println("IOException or ClassNotFoundException in run method in ClientHandler class");
+					 break;
 				 }
 			 }
 			
