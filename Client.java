@@ -23,7 +23,7 @@ public class Client {
 		new Connection(ip, port).start();
 		// connect();
 	}
-<<<<<<< HEAD
+
 	
 	//NY ROLIG KO
 	public void connect() throws UnknownHostException, IOException {

@@ -17,6 +17,7 @@ public class Server implements Runnable {
 
 	}
 
+	//Runmetoden för serverns runnable implemenation
 	public void run() {
 		Object inputObject;
 		System.out.println("Servern är igång");
