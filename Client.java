@@ -83,26 +83,37 @@ public class Client {
 					ObjectOutputStream output = new ObjectOutputStream(socket.getOutputStream());
 					ObjectInputStream input = new ObjectInputStream(socket.getInputStream())) {
 				while (true) {
-					System.out.println("inne i try sats i klient");
-//					outputObject = objectToSend;
-//					if (outputObject != null) {
+					
+//					if (objectToSend != null) {
+//						System.out.println(objectToSend);
 //						output.writeObject(objectToSend);
 //						output.flush();
 //					}
-					output.writeObject("Kolla bögarna!");
-
-					inputObject = input.readObject();
-					// inputObject = input.readObject();
-					if(inputObject != null){
+					
+//					inputObject = input.readObject();
+//					System.out.println(inputObject.toString());
+					//controller.updateChat(inputObject);
+					//String message = "Test";
+					try{
+						output.writeObject(objectToSend);
+						objectToSend = null;
+						inputObject = input.readObject();
 						controller.updateChat(inputObject);
-					}
+						
+					}catch(Exception e){}
+					
+//					System.out.println(inputObject);
+//					inputObject = input.readObject();
+//					if(inputObject != null){
+//						controller.updateChat(inputObject);
+//					}
 				}
 				// outputObject = output.writeObject(bajs);
-			} catch (IOException e) {
+			} catch (IOException e) {}
 
-			} catch (ClassNotFoundException e) {
-				e.printStackTrace();
-			}
+//			} catch (ClassNotFoundException e) {
+//				e.printStackTrace();
+//			}
 		}
 	}
 

@@ -12,13 +12,14 @@ public class Server {
 	private ObjectInputStream input;
 	private Socket connection;
 	private Object objectToSend;
-	private Buffer<Runnable> buffer = new Buffer<Runnable>();
-	private LinkedList<T> threadPool = new LinkedList<T>();
+	private Thread serverThread = new ClientHandler();
+//	private Buffer<Runnable> buffer = new Buffer<Runnable>();
+//	private LinkedList<T> threadPool = new LinkedList<T>();
 	
 	public Server(int port) throws IOException {
 		server= new ServerSocket(port, 100);
 		startRunning();
-
+		
 	}
 	public void startRunning(){
 		try{
@@ -39,14 +40,25 @@ public class Server {
 		output.flush();
 		input = new ObjectInputStream(connection.getInputStream());
 		System.out.println("Server running, streams connected");
+		serverThread.start();
 	}
 
 
-	private class ClientHandler implements Runnable{
+	private class ClientHandler extends Thread{
 
 		
 		public void run() {
-			 
+			Object outputObject, inputObject;
+			 while(true){
+				 try{
+					 inputObject = input.readObject();
+					 //System.out.println(inputObject.toString());
+					 output.writeObject("SERVER- "+inputObject);
+					 output.flush();
+				 }catch(IOException | ClassNotFoundException e){
+					 System.out.println(e.getMessage());
+				 }
+			 }
 			
 		}
 		
@@ -72,7 +84,7 @@ public class Server {
 //	}
 
 	public static void main(String[] args) throws IOException {
-		new Server(3520);
+		new Server(1337);
 	}
 
 }

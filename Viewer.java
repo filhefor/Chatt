@@ -21,12 +21,13 @@ public class Viewer extends JPanel implements ActionListener{
 		btnSend.setPreferredSize(new Dimension(75,50));
 		panelSouth.add(messageInput, BorderLayout.CENTER);
 		panelSouth.add(btnSend, BorderLayout.EAST);
-		panelCenter.add(messageArea, BorderLayout.CENTER);
+		panelCenter.add(new JScrollPane(messageArea), BorderLayout.CENTER);
 		add(panelCenter,BorderLayout.CENTER);
 		add(panelSouth, BorderLayout.SOUTH);
 		messageInput.addActionListener(this);
 		btnSend.addActionListener(this);
 		messageArea.setEditable(false);
+		
 	}
 	
 	public void updateChat(Object o){
