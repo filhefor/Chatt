@@ -84,15 +84,18 @@ public class Client {
 					ObjectInputStream input = new ObjectInputStream(socket.getInputStream())) {
 				while (true) {
 					System.out.println("inne i try sats i klient");
-					outputObject = objectToSend;
-					if (outputObject != null) {
-						output.writeObject(objectToSend);
-						output.flush();
-					}
+//					outputObject = objectToSend;
+//					if (outputObject != null) {
+//						output.writeObject(objectToSend);
+//						output.flush();
+//					}
+					output.writeObject("Kolla bögarna!");
+
 					inputObject = input.readObject();
 					// inputObject = input.readObject();
-					controller.updateChat(inputObject);
-
+					if(inputObject != null){
+						controller.updateChat(inputObject);
+					}
 				}
 				// outputObject = output.writeObject(bajs);
 			} catch (IOException e) {

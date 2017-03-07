@@ -42,12 +42,6 @@ public class ClientController {
 		client.setOkToSend(true);
 		client.setObjectToSend(o);
 
-		// try {
-		// client.sendMessage(o);
-		// } catch (IOException e) {
-		// // TODO Auto-generated catch block
-		// e.printStackTrace();
-		// }
 	}
 	
 	public static void main(String[] args) {
