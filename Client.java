@@ -23,9 +23,9 @@ public class Client {
 		new Connection(ip, port).start();
 		// connect();
 	}
+<<<<<<< HEAD
 	
-	//NY ROLIG KOMMENTAR
-
+	//NY ROLIG KO
 	public void connect() throws UnknownHostException, IOException {
 		System.out.println("connect metoden i klient");
 		socket = new Socket(ip, port);
