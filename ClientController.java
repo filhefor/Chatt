@@ -5,7 +5,7 @@ import javax.swing.*;
 
 public class ClientController {
 	private Client client;
-	private Viewer gui = new Viewer(this);
+	private Viewer viewer = new Viewer(this);
 
 	public ClientController(Client client) {
 		System.out.println("controller konstruktor");
@@ -20,7 +20,7 @@ public class ClientController {
 			public void run() {
 				JFrame frame = new JFrame("Client");
 				frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-				frame.add(gui);
+				frame.add(viewer);
 				frame.pack();
 				frame.setVisible(true);
 			}
@@ -30,10 +30,10 @@ public class ClientController {
 	public void updateChat(Object o) {
 		if(o instanceof String){
 			String stringMessage = (String)o;
-			gui.updateChat(stringMessage);
+			viewer.updateChat(stringMessage);
 		}else if(o instanceof ImageIcon){
 			ImageIcon imageMessage = (ImageIcon)o;
-			gui.updateChat(imageMessage);
+			viewer.updateChat(imageMessage);
 		}
 		
 	}
@@ -48,5 +48,10 @@ public class ClientController {
 		// // TODO Auto-generated catch block
 		// e.printStackTrace();
 		// }
+	}
+	
+	public static void main(String[] args) {
+		Client client = new Client("127.0.0.1", 1337, "filhefor");
+		new ClientController(client);
 	}
 }

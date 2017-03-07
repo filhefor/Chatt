@@ -15,7 +15,7 @@ public class Client {
 	private ObjectOutputStream output;
 	private ObjectInputStream input;
 
-	public Client(String ip, int port, String username) throws UnknownHostException, IOException {
+	public Client(String ip, int port, String username) {
 		System.out.println("Client konstruktor");
 		this.username = username;
 		this.ip = ip;
@@ -82,9 +82,10 @@ public class Client {
 			try (Socket socket = new Socket(ip, port);
 					ObjectOutputStream output = new ObjectOutputStream(socket.getOutputStream());
 					ObjectInputStream input = new ObjectInputStream(socket.getInputStream())) {
-				while (!Thread.interrupted()) {
+				while (true) {
 					System.out.println("inne i try sats i klient");
-					if (isOkToSend()) {
+					outputObject = objectToSend;
+					if (outputObject != null) {
 						output.writeObject(objectToSend);
 						output.flush();
 					}
