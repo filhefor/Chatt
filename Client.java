@@ -23,9 +23,7 @@ public class Client {
 		new Connection(ip, port).start();
 		// connect();
 	}
-<<<<<<< HEAD
-	
-	//NY ROLIG KO
+
 	public void connect() throws UnknownHostException, IOException {
 		System.out.println("connect metoden i klient");
 		socket = new Socket(ip, port);
@@ -103,8 +101,6 @@ public class Client {
 			}
 		}
 	}
-
-	
 
 	public Object getObjectToSend() {
 		return objectToSend;

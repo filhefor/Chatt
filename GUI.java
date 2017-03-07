@@ -26,6 +26,7 @@ public class GUI extends JPanel implements ActionListener{
 		add(panelSouth, BorderLayout.SOUTH);
 		messageInput.addActionListener(this);
 		btnSend.addActionListener(this);
+		messageArea.setEditable(false);
 	}
 	
 	public void updateChat(Object o){
