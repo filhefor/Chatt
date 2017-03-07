@@ -25,15 +25,23 @@ public class Viewer extends JPanel implements ActionListener{
 		btnSend.setPreferredSize(new Dimension(75,50));
 		panelSouth.add(messageInput, BorderLayout.CENTER);
 		panelSouth.add(btnSend, BorderLayout.EAST);
+<<<<<<< HEAD
+		panelCenter.add(new JScrollPane(messageArea), BorderLayout.CENTER);
+=======
 		panelCenter.add(messageArea, BorderLayout.CENTER);
 		panelWest.add(messageUsers, BorderLayout.CENTER);
+>>>>>>> origin/master
 		add(panelCenter,BorderLayout.CENTER);
 		add(panelSouth, BorderLayout.SOUTH);
 		add(panelWest, BorderLayout.WEST);
 		messageInput.addActionListener(this);
 		btnSend.addActionListener(this);
 		messageArea.setEditable(false);
+<<<<<<< HEAD
+		
+=======
 		messageUsers.setEditable(false);
+>>>>>>> origin/master
 	}
 	
 	public void updateChat(Object o){
