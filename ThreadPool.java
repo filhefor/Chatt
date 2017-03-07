@@ -34,18 +34,27 @@ public class ThreadPool {
 			buffer.addLast(obj);
 			notifyAll();
 		}
-
+/**
+ * returns the first thread in the pool.
+ * @return T
+ * @throws InterruptedException
+ */
 		public synchronized T get() throws InterruptedException {
 			while (buffer.isEmpty()) {
 				wait();
 			}
 			return buffer.removeFirst();
 		}
-
+/**
+ * Clears the pool of all threads.
+ */
 		public synchronized void clear() {
 			buffer.clear();
 		}
-
+/**
+ * return the size of the thread pool.
+ * @return thread pool size
+ */
 		public int size() {
 			return buffer.size();
 		}
