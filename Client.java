@@ -23,7 +23,7 @@ public class Client {
 		new Connection(ip, port).start();
 		// connect();
 	}
-
+//DET E NAJS MED GITFAN
 	public void connect() throws UnknownHostException, IOException {
 		System.out.println("connect metoden i klient");
 		socket = new Socket(ip, port);
