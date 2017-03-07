@@ -23,6 +23,8 @@ public class Client {
 		new Connection(ip, port).start();
 		// connect();
 	}
+	
+	//NY ROLIG KOMMENTAR
 
 	public void connect() throws UnknownHostException, IOException {
 		System.out.println("connect metoden i klient");
