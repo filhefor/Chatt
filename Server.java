@@ -2,61 +2,74 @@ package gu;
 
 import java.io.*;
 import java.net.*;
+import java.nio.Buffer;
+import java.util.LinkedList;
 
-public class Server implements Runnable {
-	private ServerSocket serverSocket;
-	private Thread server = new Thread(this);
-	private Object inputObject;
-
+public class Server {
+	
+	private ServerSocket server;
+	private ObjectOutputStream output;
+	private ObjectInputStream input;
+	private Socket connection;
+	private Object objectToSend;
+	private Buffer<Runnable> buffer = new Buffer<Runnable>();
+	private LinkedList<T> threadPool = new LinkedList<T>();
+	
 	public Server(int port) throws IOException {
-		// serverSocket = new ServerSocket(port);
-		// server.start();
-
-		serverSocket = new ServerSocket(port);
-		server.start();
+		server= new ServerSocket(port, 100);
+		startRunning();
 
 	}
-
-	public void run() {
-		Object inputObject;
-		System.out.println("Servern är igång");
-		while (true) {
-			try (Socket socket = serverSocket.accept();
-					ObjectInputStream input = new ObjectInputStream(socket.getInputStream());
-					ObjectOutputStream output = new ObjectOutputStream(socket.getOutputStream())) {
-				System.out.println("inne i try sats i server");
-
-				inputObject = input.readObject();
-
-				output.writeObject(inputObject);
-				output.flush();
-
-			} catch (IOException | ClassNotFoundException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-		}
-
-	}
-
-	private class ConnectionThread extends Thread {
-
-		public void run() {
-
-			while (true) {
-				try (Socket socket = serverSocket.accept();
-						ObjectOutputStream output = new ObjectOutputStream(socket.getOutputStream());
-						ObjectInputStream input = new ObjectInputStream(socket.getInputStream())) {
-					inputObject = input.readObject();
-
-					output.writeObject(inputObject);
-					output.flush();
-				} catch (IOException | ClassNotFoundException e) {
+	public void startRunning(){
+		try{
+			while(true){
+				try{
+					connection = server.accept();
+					setupStreams();
+				}catch(EOFException eofException){
+					eofException.printStackTrace();
 				}
 			}
-
+		}catch (IOException ioException){
+			ioException.printStackTrace();
 		}
 	}
+	public void setupStreams() throws IOException{
+		output = new ObjectOutputStream(connection.getOutputStream());
+		output.flush();
+		input = new ObjectInputStream(connection.getInputStream());
+		System.out.println("Server running, streams connected");
+	}
+
+
+	private class ClientHandler implements Runnable{
+
+		
+		public void run() {
+			 
+			
+		}
+		
+	}
+
+//	private class ConnectionThread extends Thread {
+//
+//		public void run() {
+//
+//			while (true) {
+//				try (Socket socket = serverSocket.accept();
+//						ObjectOutputStream output = new ObjectOutputStream(socket.getOutputStream());
+//						ObjectInputStream input = new ObjectInputStream(socket.getInputStream())) {
+//					inputObject = input.readObject();
+//
+//					output.writeObject(inputObject);
+//					output.flush();
+//				} catch (IOException | ClassNotFoundException e) {
+//				}
+//			}
+//
+//		}
+//	}
 
 	public static void main(String[] args) throws IOException {
 		new Server(3520);
