@@ -8,7 +8,7 @@ import javax.swing.SwingUtilities;
 
 public class Controller {
 	private Client client;
-	private GUI gui = new GUI(this);
+	private Viewer gui = new Viewer(this);
 	
 	public Controller(Client client) {
 		System.out.println("controller konstruktor");

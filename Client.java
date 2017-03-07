@@ -5,7 +5,7 @@ import java.io.*;
 import java.net.*;
 
 public class Client {
-	private Controller controller;
+	private ClientController controller;
 	private String username;
 	private Socket socket;
 	private Object objectToSend;
@@ -41,7 +41,7 @@ public class Client {
 		System.out.println("Klienten är ansluten till servern");
 	}
 
-	public void setController(Controller controller) {
+	public void setController(ClientController controller) {
 		this.controller = controller;
 	}
 

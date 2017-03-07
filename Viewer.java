@@ -5,15 +5,15 @@ import java.awt.event.*;
 
 import javax.swing.*;
 
-public class GUI extends JPanel implements ActionListener{
-	private Controller controller;
+public class Viewer extends JPanel implements ActionListener{
+	private ClientController controller;
 	private JTextField messageInput = new JTextField();
 	private JTextArea messageArea = new JTextArea();
 	private JButton btnSend = new JButton("Skicka");
 	private JPanel panelSouth = new JPanel();
 	private JPanel panelCenter = new JPanel();
 	
-	public GUI(Controller controller){
+	public Viewer(ClientController controller){
 		this.controller = controller;
 		setLayout(new BorderLayout());
 		messageArea.setPreferredSize(new Dimension(500,500));
