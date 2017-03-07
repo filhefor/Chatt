@@ -18,6 +18,11 @@ public class Controller {
 		//client.getData();
 	}
 	
+	public void HEJ(String trosa){
+		
+		
+	}
+	
 	public void showGUI(){
 		SwingUtilities.invokeLater(new Runnable() {
 			public void run() {
