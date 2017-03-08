@@ -17,11 +17,12 @@ public class Client implements Observer {
 	private ObjectOutputStream output;
 	private ObjectInputStream input;
 
-	public Client(String ip, int port, String username) {
+	public Client(String ip, int port, String username, ClientController controller) {
 		System.out.println("Client konstruktor");
 		this.username = username;
 		this.ip = ip;
 		this.port = port;
+		this.controller = controller;
 		new ServerListener(ip, port);
 		// connect();
 	}
@@ -60,11 +61,18 @@ public class Client implements Observer {
 
 		public void run() {
 			Object message;
+			boolean ready = false;
+			try {
+					output.writeObject("rdy");
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
 			while (true) {
 
 				try {
 					message = input.readObject();
 					System.out.println(message + " från klient");
+					System.out.println(controller);
 					controller.updateChat(message);
 				} catch (IOException ioe) {
 
