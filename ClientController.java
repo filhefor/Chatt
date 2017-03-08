@@ -50,8 +50,13 @@ public class ClientController extends Observable{
 
 	}
 	
+	public void updateUsers(String user){
+		viewer.updateUsers(user);
+	}
+	
 	public static void main(String[] args) {
-		Client client = new Client("127.0.0.1", 1337, "filhefor");
+		String username = JOptionPane.showInputDialog("Välj användarnamn");
+		Client client = new Client("127.0.0.1", 1337, username);
 		new ClientController(client);
 	}
 }

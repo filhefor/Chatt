@@ -9,7 +9,8 @@ public class Server implements Runnable {
 	private ServerSocket serverSocket;
 	private Thread server = new Thread(this);
 	private boolean on = true;
-	private ArrayList<ClientHandle> list = new ArrayList<ClientHandle>();
+	private ArrayList<ClientHandler> list = new ArrayList<ClientHandler>();
+	private ArrayList<String> connectedUsers = new ArrayList<String>();
 
 	public Server(int port, int nbrOfThreads) throws IOException {
 		serverSocket = new ServerSocket(port);
@@ -18,8 +19,9 @@ public class Server implements Runnable {
 	}
 	
 	public synchronized void sendMessage(Object obj) {
-		for(int i = list.size(); --i >= 0;) {
-			ClientHandle sendClient = list.get(i);
+		ClientHandler sendClient;
+		for(int i = 0; i < list.size(); i++) {
+			sendClient = list.get(i);
 			try{
 				if(!sendClient.writeMessage(obj)) {
 					list.remove(i);
@@ -35,7 +37,7 @@ public class Server implements Runnable {
 		try {
 			while(on) {
 			Socket socket = serverSocket.accept();
-			ClientHandle newClient = new ClientHandle(socket);
+			ClientHandler newClient = new ClientHandler(socket);
 			System.out.println("ClientConnected");
 			list.add(newClient);
 			newClient.start();
@@ -43,7 +45,7 @@ public class Server implements Runnable {
 			try {
 				serverSocket.close();
 				for(int i = 0; i < list.size(); i++) {
-					ClientHandle clientClose = list.get(i);
+					ClientHandler clientClose = list.get(i);
 					try {
 						clientClose.input.close();
 						clientClose.output.close();
@@ -57,7 +59,7 @@ public class Server implements Runnable {
 	}
 	}
 
-	private class ClientHandle extends Thread {
+	private class ClientHandler extends Thread {
 		private Socket socket;
 		private ObjectInputStream input;
 		private ObjectOutputStream output;
@@ -65,13 +67,25 @@ public class Server implements Runnable {
 		private String username;
 		private String message;
 
-		public ClientHandle(Socket socket) {
+		public ClientHandler(Socket socket) {
 			this.socket = socket;
 			try {
 				output = new ObjectOutputStream(socket.getOutputStream());
 				input = new ObjectInputStream(socket.getInputStream());
 				username = (String) input.readObject();
 				System.out.println(username + " connected");
+				
+				connectedUsers.add(username);
+				String test = "Aktiva användare: \n";
+				if(!connectedUsers.isEmpty()){
+					for(int i = 0; i < connectedUsers.size(); i++){
+						output.writeObject("user,"+connectedUsers.get(i));
+						test += connectedUsers.get(i) + "\n";
+						System.out.println(test);
+					}
+				}
+				
+				
 			} catch (IOException | ClassNotFoundException e) {
 			}
 		}
@@ -81,7 +95,7 @@ public class Server implements Runnable {
 				try {
 					message = (String) input.readObject();
 					System.out.println(message);
-					sendMessage(message);
+					sendMessage(username + "- " + message);
 					
 				} catch (IOException | ClassNotFoundException e) {
 					break;
@@ -92,6 +106,7 @@ public class Server implements Runnable {
 		private boolean writeMessage(Object obj) throws IOException {
 			if(!socket.isConnected()) {
 				socket.close();
+				System.out.println("Disconnected client");
 				return false;
 			}
 			try {

@@ -3,8 +3,7 @@ package gu;
 import java.io.*;
 
 import java.net.*;
-import java.util.Observable;
-import java.util.Observer;
+import java.util.*;
 
 public class Client implements Observer {
 	private ClientController controller;
@@ -16,6 +15,8 @@ public class Client implements Observer {
 	private int port;
 	private ObjectOutputStream output;
 	private ObjectInputStream input;
+	private ArrayList<String> usersToSendTo = new ArrayList<String>();
+	private ArrayList<String> connectedUsers = new ArrayList<String>();
 
 	public Client(String ip, int port, String username) {
 		System.out.println("Client konstruktor");
@@ -34,7 +35,6 @@ public class Client implements Observer {
 		objectToSend = o;
 	}
 
-
 	private class ServerListener extends Thread {
 		private String ip;
 		private int port;
@@ -51,7 +51,7 @@ public class Client implements Observer {
 			try {
 				input = new ObjectInputStream(socket.getInputStream());
 				output = new ObjectOutputStream(socket.getOutputStream());
-				output.writeObject("asdf");
+				output.writeObject(username);
 			} catch (IOException ioe) {
 
 			}
@@ -64,8 +64,22 @@ public class Client implements Observer {
 
 				try {
 					message = input.readObject();
-					System.out.println(message + " från klient");
-					controller.updateChat(message);
+					String msg = (String)message;
+					if(msg.contains("user")){
+						String[] msgArray = msg.split(",");
+						connectedUsers.add(msgArray[1]);
+						if(!connectedUsers.isEmpty()){
+							for(int i = 0; i < connectedUsers.size(); i++){
+								controller.updateUsers(connectedUsers.get(i));
+							}
+						}
+					
+					}else{
+						System.out.println(message + " från klient");
+						controller.updateChat(message);
+					}
+					
+
 				} catch (IOException ioe) {
 
 				} catch (ClassNotFoundException cnfe) {
@@ -75,7 +89,7 @@ public class Client implements Observer {
 			}
 
 		}
-		
+
 	}
 
 	public Object getObjectToSend() {
@@ -85,7 +99,7 @@ public class Client implements Observer {
 	public void setObjectToSend(Object objectToSend) {
 		this.objectToSend = objectToSend;
 		try {
-			//System.out.println("objekt: "+this.objectToSend);
+			// System.out.println("objekt: "+this.objectToSend);
 			output.writeObject(objectToSend);
 			output.flush();
 

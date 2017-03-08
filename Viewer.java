@@ -52,6 +52,10 @@ public class Viewer extends JPanel implements ActionListener{
 			messageArea.append("\n" + (String)o);
 		}
 	}
+	
+	public void updateUsers(String user){
+		messageUsers.append("\n"+user);
+	}
 
 	public void actionPerformed(ActionEvent e) {
 		System.out.println("Du klickade på enter/skicka");
