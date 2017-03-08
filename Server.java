@@ -12,7 +12,6 @@ public class Server {
 	private ObjectInputStream input;
 	private Socket connection;
 	private Object objectToSend;
-
 	private Thread serverThread = new ClientHandler();
 
 	public Server(int port) throws IOException {
@@ -43,7 +42,6 @@ public class Server {
 		output = new ObjectOutputStream(connection.getOutputStream());
 		output.flush();
 		input = new ObjectInputStream(connection.getInputStream());
-
 		System.out.println("Streams connected");
 		serverThread.start();
 
@@ -52,6 +50,7 @@ public class Server {
 	private class ClientHandler extends Thread {
 		
 		public void run() {
+
 			Object inputObject;
 			System.out.println("ClientHandler runmetod i Server.java är igång");
 			//Object outputObject, inputObject;
@@ -68,6 +67,22 @@ public class Server {
 					//System.out.println(e.getMessage() + "NÅGOT ÄR FEL");
 				}
 			}
+
+
+			Object outputObject, inputObject;
+			 while(!Thread.interrupted()){
+				 try{
+					 inputObject = input.readObject();
+					 if(inputObject!=null){
+					 //System.out.println(inputObject.toString());
+					 output.writeObject("SERVER- "+inputObject);
+					 output.flush();
+					 }
+				 }catch(IOException | ClassNotFoundException e){
+					 System.out.println("IOException or ClassNotFoundException in run method in ClientHandler class");
+					 break;
+				 }
+			 }
 
 		}
 
