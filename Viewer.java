@@ -5,9 +5,9 @@ import java.awt.event.*;
 
 import javax.swing.*;
 
-public class Viewer extends JPanel implements ActionListener{
+public class Viewer extends JPanel implements ActionListener, KeyListener{
 	private ClientController controller;
-	private JTextField messageInput = new JTextField();
+	private JTextArea messageInput = new JTextArea();
 	private JTextArea messageArea = new JTextArea();
 	private JTextArea messageUsers = new JTextArea ("AKTIVA ANVÄNDARE");
 	private JButton btnSend = new JButton("Skicka");
@@ -34,7 +34,7 @@ public class Viewer extends JPanel implements ActionListener{
 		add(panelCenter,BorderLayout.CENTER);
 		add(panelSouth, BorderLayout.SOUTH);
 		add(panelWest, BorderLayout.WEST);
-		messageInput.addActionListener(this);
+		messageArea.addKeyListener(this);
 		btnSend.addActionListener(this);
 		messageArea.setEditable(false);
 		messageUsers.setEditable(false);
@@ -51,5 +51,25 @@ public class Viewer extends JPanel implements ActionListener{
 		System.out.println("Du klickade på enter/skicka");
 		controller.sendObject((Object)messageInput.getText());
 		messageInput.setText("");
+	}
+	
+	public void keyPressed(KeyEvent e){
+	    if(e.getKeyCode() == KeyEvent.VK_ENTER){
+	    e.consume();
+	    btnSend.doClick();
+	    }
+	
+}
+
+	@Override
+	public void keyReleased(KeyEvent e) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void keyTyped(KeyEvent e) {
+		// TODO Auto-generated method stub
+		
 	}
 }
