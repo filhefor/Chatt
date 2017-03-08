@@ -22,20 +22,20 @@ public class Viewer extends JPanel implements ActionListener{
 		setPreferredSize(new Dimension(800,600));
 		setLayout(new BorderLayout());
 		
-		messageArea.setPreferredSize(new Dimension(500,10));
+		messageArea.setPreferredSize(new Dimension(500,300));
 		messageInput.setPreferredSize(new Dimension(450,100));
 		messageUsers.setPreferredSize(new Dimension(150,500));
 		btnSend.setPreferredSize(new Dimension(75,50));
 		
-		panelSouth.add(messageInput, BorderLayout.CENTER);
-		panelSouth.add(btnSend, BorderLayout.EAST);
-//		panelCenter.add(new JScrollPane(messageArea), BorderLayout.CENTER);
+		panelSouth.add(messageInput);
+		panelSouth.add(btnSend);
+		panelCenter.add(new JScrollPane(messageArea));
 //		panelCenter.add(messageArea, BorderLayout.CENTER);
-//		panelWest.add(messageUsers, BorderLayout.CENTER);
+		panelWest.add(messageUsers);
 
-		add(messageArea, BorderLayout.CENTER);;
-		add(messageUsers, BorderLayout.WEST);
-		add(panelSouth, BorderLayout.SOUTH);
+		add(panelCenter);
+		add(messageUsers);
+		add(panelSouth);
 		
 		messageArea.setBorder(BorderFactory.createEtchedBorder(EtchedBorder.LOWERED));
 		messageUsers.setBorder(BorderFactory.createEtchedBorder(EtchedBorder.RAISED));
