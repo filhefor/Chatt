@@ -26,23 +26,6 @@ public class Client implements Observer {
 		// connect();
 	}
 
-	public void connect() throws UnknownHostException, IOException {
-		System.out.println("connect metoden i klient");
-		socket = new Socket(ip, port);
-		System.out.println("socket klar: " + socket.getLocalAddress() + " " + socket.getPort());
-		System.out.println(socket.getOutputStream());
-		// try{
-		// output = new ObjectOutputStream(socket.getOutputStream());
-		// output.flush();
-		// input = new ObjectInputStream(socket.getInputStream());
-		// //getData();
-		// }catch(Exception e){
-		// System.out.println("Kunde inte hämta strömmar");
-		// }
-
-		System.out.println("Klienten är ansluten till servern");
-	}
-
 	public void setController(ClientController controller) {
 		this.controller = controller;
 	}
@@ -51,23 +34,6 @@ public class Client implements Observer {
 		objectToSend = o;
 	}
 
-	public void getData() {
-		Object message;
-		while (true) {
-			try {
-				input = new ObjectInputStream(socket.getInputStream());
-				message = input.readObject();
-				controller.updateChat(message);
-			} catch (IOException | ClassNotFoundException e) {
-			}
-		}
-	}
-
-	public void sendMessage(Object message) throws IOException {
-		output = new ObjectOutputStream(socket.getOutputStream());
-		output.writeObject(message);
-		output.flush();
-	}
 
 	private class ServerListener extends Thread {
 		private String ip;
@@ -108,25 +74,7 @@ public class Client implements Observer {
 			}
 
 		}
-		// Object outputObject, inputObject;
-		// while (true) {
-		// try (Socket socket = new Socket(ip, port);
-		// ObjectOutputStream output = new
-		// ObjectOutputStream(socket.getOutputStream());
-		// ObjectInputStream input = new
-		// ObjectInputStream(socket.getInputStream())) {
-		//
-		// System.out.println("inne i while loop");
-		// try{
-		// output.writeObject(objectToSend);
-		// output.flush();
-		// objectToSend = null;
-		// }catch(Exception e){}
-		//
-		// // outputObject = output.writeObject(bajs);
-		// } catch (IOException e) {}
-		// }
-		// }
+		
 	}
 
 	public Object getObjectToSend() {
