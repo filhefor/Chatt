@@ -8,8 +8,9 @@ import javax.swing.*;
 public class Viewer extends JPanel implements ActionListener, KeyListener{
 	private ClientController controller;
 	private JTextArea messageInput = new JTextArea();
-	private JTextArea messageArea = new JTextArea();
-	private JTextArea messageUsers = new JTextArea ("AKTIVA ANVÄNDARE");
+	private JTextArea messageArea = new JTextArea();	
+	private JTextField messageUsers= new JTextField();
+
 	private JButton btnSend = new JButton("Skicka");
 	private JPanel panelSouth = new JPanel();
 	private JPanel panelCenter = new JPanel();
@@ -18,30 +19,29 @@ public class Viewer extends JPanel implements ActionListener, KeyListener{
 	
 	public Viewer(ClientController controller){
 		this.controller = controller;
+		setPreferredSize(new Dimension(700,600));
 		setLayout(new BorderLayout());
+		
 		messageArea.setPreferredSize(new Dimension(500,500));
 		messageInput.setPreferredSize(new Dimension(450,100));
 		messageUsers.setPreferredSize(new Dimension(150,500));
 		btnSend.setPreferredSize(new Dimension(75,50));
-		panelSouth.add(messageInput, BorderLayout.CENTER);
-		panelSouth.add(btnSend, BorderLayout.EAST);
-<<<<<<< HEAD
-		panelCenter.add(new JScrollPane(messageArea), BorderLayout.CENTER);
-=======
-		panelCenter.add(messageArea, BorderLayout.CENTER);
-		panelWest.add(messageUsers, BorderLayout.CENTER);
->>>>>>> origin/master
-		add(panelCenter,BorderLayout.CENTER);
-		add(panelSouth, BorderLayout.SOUTH);
-		add(panelWest, BorderLayout.WEST);
+		
+//		panelSouth.add(messageInput, BorderLayout.CENTER);
+//		panelSouth.add(btnSend, BorderLayout.EAST);
+//		panelCenter.add(new JScrollPane(messageArea), BorderLayout.CENTER);
+//		panelCenter.add(messageArea, BorderLayout.CENTER);
+//		panelWest.add(messageUsers, BorderLayout.CENTER);
+		
+		add(messageArea,BorderLayout.CENTER);
+		add(messageInput, BorderLayout.SOUTH);
+		add(messageUsers, BorderLayout.WEST);
+		add(btnSend, BorderLayout.SOUTH);
+		
 		messageArea.addKeyListener(this);
 		btnSend.addActionListener(this);
 		messageArea.setEditable(false);
-<<<<<<< HEAD
-		
-=======
 		messageUsers.setEditable(false);
->>>>>>> origin/master
 	}
 	
 	public void updateChat(Object o){

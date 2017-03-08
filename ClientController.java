@@ -1,11 +1,14 @@
 package gu;
 
+import java.awt.Dimension;
+
 import javax.swing.*;
 
 
 public class ClientController {
 	private Client client;
 	private Viewer viewer = new Viewer(this);
+	private ClientUI ui = new ClientUI(this);
 
 	public ClientController(Client client) {
 		System.out.println("controller konstruktor");
@@ -21,7 +24,9 @@ public class ClientController {
 				JFrame frame = new JFrame("Client");
 				frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 				frame.add(viewer);
+				frame.setLocation(350, 150);
 				frame.pack();
+				frame.setMinimumSize(new Dimension(500,500));
 				frame.setVisible(true);
 			}
 		});
