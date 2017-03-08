@@ -68,22 +68,6 @@ public class Server {
 				}
 			}
 
-
-			Object outputObject, inputObject;
-			 while(!Thread.interrupted()){
-				 try{
-					 inputObject = input.readObject();
-					 if(inputObject!=null){
-					 //System.out.println(inputObject.toString());
-					 output.writeObject("SERVER- "+inputObject);
-					 output.flush();
-					 }
-				 }catch(IOException | ClassNotFoundException e){
-					 System.out.println("IOException or ClassNotFoundException in run method in ClientHandler class");
-					 break;
-				 }
-			 }
-
 		}
 
 	}
