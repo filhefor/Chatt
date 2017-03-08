@@ -10,12 +10,11 @@ public class ClientController extends Observable{
 	private Client client;
 	private Viewer viewer = new Viewer(this);
 
-	public ClientController(Client client) {
+	public ClientController() {
 		System.out.println("controller konstruktor");
-		this.client = client;
-		client.setController(this);
 		showGUI();
-		//client.getData();
+		Client client = new Client("127.0.0.1", 1337, "filhefor", this);
+		this.client = client;
 	}
 
 	public void showGUI() {
@@ -43,15 +42,12 @@ public class ClientController extends Observable{
 	}
 
 	public void sendObject(Object o) {
-//		setChanged();
-//		notifyObservers(o);
 		client.setOkToSend(true);
 		client.setObjectToSend(o);
 
 	}
 	
 	public static void main(String[] args) {
-		Client client = new Client("127.0.0.1", 1337, "filhefor");
-		new ClientController(client);
+		ClientController controller = new ClientController();
 	}
 }

@@ -3,6 +3,7 @@ package gu;
 import java.io.*;
 import java.net.*;
 import java.util.ArrayList;
+import java.util.LinkedList;
 
 public class Server implements Runnable {
 
@@ -10,6 +11,7 @@ public class Server implements Runnable {
 	private Thread server = new Thread(this);
 	private boolean on = true;
 	private ArrayList<ClientHandler> list = new ArrayList<ClientHandler>();
+	private LinkedList<Object> messageList = new LinkedList<Object>();
 
 	public Server(int port, int nbrOfThreads) throws IOException {
 		serverSocket = new ServerSocket(port);
@@ -17,11 +19,11 @@ public class Server implements Runnable {
 
 	}
 	
-	public synchronized void sendMessage(String username, Object obj) {
+	public synchronized void sendMessage(Object obj) {
 		for(int i = list.size(); --i >= 0;) {
 			ClientHandler sendClient = list.get(i);
 			try{
-				if(!sendClient.writeMessage(username, obj)) {
+				if(!sendClient.writeMessage(obj)) {
 					list.remove(i);
 					System.out.println("Disconnected client");
 				}
@@ -71,6 +73,13 @@ public class Server implements Runnable {
 				output = new ObjectOutputStream(socket.getOutputStream());
 				input = new ObjectInputStream(socket.getInputStream());
 				username = (String) input.readObject();
+				String status = (String) input.readObject();
+				if (status.equals("rdy")) {
+					for(int i = 0; i < messageList.size(); i++) {
+						writeMessage(messageList.get(i));
+						System.out.println(messageList.get(i));
+					}
+				}
 				System.out.println(username + " connected");
 			} catch (IOException | ClassNotFoundException e) {
 			}
@@ -81,7 +90,8 @@ public class Server implements Runnable {
 				try {
 					message = (String) input.readObject();
 					System.out.println(message);
-					sendMessage(username, message);
+					messageList.add(username + " - " + message);
+					sendMessage(username + " - " + message);
 					
 				} catch (IOException | ClassNotFoundException e) {
 					break;
@@ -89,13 +99,14 @@ public class Server implements Runnable {
 			}
 		}
 		
-		private boolean writeMessage(String username, Object obj) throws IOException {
+		private synchronized boolean writeMessage(Object obj) throws IOException {
 			if(!socket.isConnected()) {
 				socket.close();
 				return false;
 			}
 			try {
-				output.writeObject(username + " - " + obj);
+				System.out.println(obj + "Hej");
+				output.writeObject(obj);
 			} catch(IOException e) {
 			}
 			return true;
