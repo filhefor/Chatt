@@ -1,5 +1,6 @@
 package gu;
 
+import java.awt.Dimension;
 import java.util.Observable;
 
 import javax.swing.*;
@@ -24,6 +25,7 @@ public class ClientController extends Observable{
 				frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 				frame.add(viewer);
 				frame.pack();
+				frame.setMinimumSize(new Dimension(600,500));
 				frame.setVisible(true);
 			}
 		});
