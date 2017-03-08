@@ -1,9 +1,11 @@
 package gu;
 
+import java.util.Observable;
+
 import javax.swing.*;
 
 
-public class ClientController {
+public class ClientController extends Observable{
 	private Client client;
 	private Viewer viewer = new Viewer(this);
 
@@ -39,6 +41,8 @@ public class ClientController {
 	}
 
 	public void sendObject(Object o) {
+//		setChanged();
+//		notifyObservers(o);
 		client.setOkToSend(true);
 		client.setObjectToSend(o);
 

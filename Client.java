@@ -3,8 +3,10 @@ package gu;
 import java.io.*;
 
 import java.net.*;
+import java.util.Observable;
+import java.util.Observer;
 
-public class Client {
+public class Client implements Observer {
 	private ClientController controller;
 	private String username;
 	private Socket socket;
@@ -20,7 +22,7 @@ public class Client {
 		this.username = username;
 		this.ip = ip;
 		this.port = port;
-		new Connection(ip, port).start();
+		new ServerListener(ip, port);
 		// connect();
 	}
 
@@ -67,54 +69,64 @@ public class Client {
 		output.flush();
 	}
 
-	private class Connection extends Thread {
+	private class ServerListener extends Thread {
 		private String ip;
 		private int port;
 
-		public Connection(String ip, int port) {
+		public ServerListener(String ip, int port) {
 			this.ip = ip;
 			this.port = port;
+			try {
+				socket = new Socket(ip, port);
+
+			} catch (Exception e) {
+
+			}
+			try {
+				input = new ObjectInputStream(socket.getInputStream());
+				output = new ObjectOutputStream(socket.getOutputStream());
+			} catch (IOException ioe) {
+
+			}
+			start();
 		}
 
 		public void run() {
-			Object outputObject, inputObject;
+			Object message;
+			while (true) {
 
-			try (Socket socket = new Socket(ip, port);
-					ObjectOutputStream output = new ObjectOutputStream(socket.getOutputStream());
-					ObjectInputStream input = new ObjectInputStream(socket.getInputStream())) {
-				while (true) {
-					
-//					if (objectToSend != null) {
-//						System.out.println(objectToSend);
-//						output.writeObject(objectToSend);
-//						output.flush();
-//					}
-					
-//					inputObject = input.readObject();
-//					System.out.println(inputObject.toString());
-					//controller.updateChat(inputObject);
-					//String message = "Test";
-					try{
-						output.writeObject(objectToSend);
-						objectToSend = null;
-						inputObject = input.readObject();
-						controller.updateChat(inputObject);
-						
-					}catch(Exception e){}
-					
-//					System.out.println(inputObject);
-//					inputObject = input.readObject();
-//					if(inputObject != null){
-//						controller.updateChat(inputObject);
-//					}
+				try {
+					message = input.readObject();
+					System.out.println(message + " från klient");
+					controller.updateChat(message);
+				} catch (IOException ioe) {
+
+				} catch (ClassNotFoundException cnfe) {
+
 				}
-				// outputObject = output.writeObject(bajs);
-			} catch (IOException e) {}
 
-//			} catch (ClassNotFoundException e) {
-//				e.printStackTrace();
-//			}
+			}
+
 		}
+		// Object outputObject, inputObject;
+		// while (true) {
+		// try (Socket socket = new Socket(ip, port);
+		// ObjectOutputStream output = new
+		// ObjectOutputStream(socket.getOutputStream());
+		// ObjectInputStream input = new
+		// ObjectInputStream(socket.getInputStream())) {
+		//
+		// System.out.println("inne i while loop");
+		// try{
+		// output.writeObject(objectToSend);
+		// output.flush();
+		// objectToSend = null;
+		// }catch(Exception e){}
+		//
+		// // outputObject = output.writeObject(bajs);
+		// } catch (IOException e) {}
+		// }
+		// }
 	}
 
 	public Object getObjectToSend() {
@@ -122,9 +134,16 @@ public class Client {
 	}
 
 	public void setObjectToSend(Object objectToSend) {
-		// okToSend = true;
 		this.objectToSend = objectToSend;
+		try {
+			//System.out.println("objekt: "+this.objectToSend);
+			output.writeObject(objectToSend);
+			output.flush();
 
+			// objectToSend = null;
+		} catch (IOException ioe) {
+
+		}
 	}
 
 	public boolean isOkToSend() {
@@ -133,6 +152,11 @@ public class Client {
 
 	public void setOkToSend(boolean okToSend) {
 		this.okToSend = okToSend;
+	}
+
+	@Override
+	public void update(Observable o, Object arg) {
+		objectToSend = arg;
 	}
 
 }
