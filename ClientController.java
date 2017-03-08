@@ -48,6 +48,6 @@ public class ClientController extends Observable{
 	}
 	
 	public static void main(String[] args) {
-		ClientController controller = new ClientController();
+		new ClientController();
 	}
 }

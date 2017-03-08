@@ -61,14 +61,7 @@ public class Client implements Observer {
 
 		public void run() {
 			Object message;
-			boolean ready = false;
-			try {
-					output.writeObject("rdy");
-			} catch (IOException e) {
-				e.printStackTrace();
-			}
 			while (true) {
-
 				try {
 					message = input.readObject();
 					System.out.println(message + " från klient");

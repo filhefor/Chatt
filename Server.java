@@ -73,12 +73,9 @@ public class Server implements Runnable {
 				output = new ObjectOutputStream(socket.getOutputStream());
 				input = new ObjectInputStream(socket.getInputStream());
 				username = (String) input.readObject();
-				String status = (String) input.readObject();
-				if (status.equals("rdy")) {
-					for(int i = 0; i < messageList.size(); i++) {
-						writeMessage(messageList.get(i));
-						System.out.println(messageList.get(i));
-					}
+				for(int i = 0; i < messageList.size(); i++) {
+					writeMessage(messageList.get(i));
+					System.out.println(messageList.get(i));
 				}
 				System.out.println(username + " connected");
 			} catch (IOException | ClassNotFoundException e) {
