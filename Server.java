@@ -5,112 +5,64 @@ import java.net.*;
 import java.nio.Buffer;
 import java.util.LinkedList;
 
-public class Server {
+public class Server implements Runnable{
 
-	private ServerSocket server;
-	private ObjectOutputStream output;
-	private ObjectInputStream input;
+	private ServerSocket serverSocket;
 	private Socket connection;
+    private Thread server = new Thread(this);
 	private Object objectToSend;
-	private Thread serverThread = new ClientHandler();
+	private ThreadPool pool;
 
-	public Server(int port) throws IOException {
-		server = new ServerSocket(port, 100);
-		startRunning();
+	public Server(int port, int nbrOfThreads) throws IOException {
+		pool = new ThreadPool(nbrOfThreads);
+		serverSocket = new ServerSocket(port);
+		pool.start();
+		server.start();
 
 	}
-
-	public void startRunning() {
-		try {
-			while (true) {
-				try {
-					connection = server.accept();
-					setupStreams();
-				} catch (EOFException eofException) {
-					eofException.printStackTrace();
-					System.out.println("EOFException in startRunning method");
-				}
-			}
-		} catch (IOException ioException) {
-			ioException.printStackTrace();
-			System.out.println("IOException in startRunning method");
+	
+	public void run() {
+		while(true) {
+			try {
+				Socket socket = serverSocket.accept();
+				pool.execute(new ClientHandler(socket));
+    		} catch(IOException e) { 
+    			System.err.println(e);
+    		}
 		}
 	}
 
-	public void setupStreams() throws IOException {
-		System.out.println("Server running, waiting for connection...");
-		output = new ObjectOutputStream(connection.getOutputStream());
-		output.flush();
-		input = new ObjectInputStream(connection.getInputStream());
-		System.out.println("Streams connected");
-		serverThread.start();
-
-	}
-
-	private class ClientHandler extends Thread {
-		
+	private class ClientHandler implements Runnable {
+		private Socket socket;
+		public ClientHandler(Socket socket) {
+			this.socket = socket;
+		}
 		public void run() {
 
 			Object inputObject;
 			System.out.println("ClientHandler runmetod i Server.java är igång");
-			//Object outputObject, inputObject;
 			while (true) {
 
 				try {
-					inputObject = input.readObject();
-					System.out.println(inputObject);
-				
-					output.writeObject("SERVER- " + inputObject);
-					output.flush();
-
+					try (ObjectOutputStream output = new ObjectOutputStream(socket.getOutputStream());
+							ObjectInputStream input = new ObjectInputStream(socket.getInputStream())	) {
+						while(true) {
+							inputObject = input.readObject();
+							System.out.println(inputObject);
+							output.writeObject("SERVER- " + inputObject);
+							output.flush();
+						}
+					}
 				} catch (Exception e) {
-					//System.out.println(e.getMessage() + "NÅGOT ÄR FEL");
+					System.out.println(e.getMessage() + "NÅGOT ÄR FEL");
 				}
 			}
-
-
-			Object outputObject, inputObject;
-			 while(!Thread.interrupted()){
-				 try{
-					 inputObject = input.readObject();
-					 if(inputObject!=null){
-					 //System.out.println(inputObject.toString());
-					 output.writeObject("SERVER- "+inputObject);
-					 output.flush();
-					 }
-				 }catch(IOException | ClassNotFoundException e){
-					 System.out.println("IOException or ClassNotFoundException in run method in ClientHandler class");
-					 break;
-				 }
-			 }
-
 		}
 
 	}
 
-	// private class ConnectionThread extends Thread {
-	//
-	// public void run() {
-	//
-	// while (true) {
-	// try (Socket socket = serverSocket.accept();
-	// ObjectOutputStream output = new
-	// ObjectOutputStream(socket.getOutputStream());
-	// ObjectInputStream input = new ObjectInputStream(socket.getInputStream()))
-	// {
-	// inputObject = input.readObject();
-	//
-	// output.writeObject(inputObject);
-	// output.flush();
-	// } catch (IOException | ClassNotFoundException e) {
-	// }
-	// }
-	//
-	// }
-	// }
-
 	public static void main(String[] args) throws IOException {
-		new Server(1337);
+		new Server(1337,100);
 	}
 
 }
