@@ -13,7 +13,8 @@ public class ClientController extends Observable{
 	public ClientController() {
 		System.out.println("controller konstruktor");
 		showGUI();
-		Client client = new Client("127.0.0.1", 1337, "filhefor", this);
+		String username = JOptionPane.showInputDialog("Välj användarnamn");
+		Client client = new Client("127.0.0.1", 1337, username, this);
 		this.client = client;
 	}
 
@@ -40,6 +41,10 @@ public class ClientController extends Observable{
 		}
 		
 	}
+	
+	public void updateUsers(String user){
+		viewer.updateUsers(user);
+	}
 
 	public void sendObject(Object o) {
 		client.setOkToSend(true);
@@ -48,6 +53,6 @@ public class ClientController extends Observable{
 	}
 	
 	public static void main(String[] args) {
-		ClientController controller = new ClientController();
+		new ClientController();
 	}
 }
