@@ -22,6 +22,7 @@ public class Viewer extends JPanel implements ActionListener, KeyListener{
 	private JPanel panelCenter = new JPanel();
 	private JPanel panelWest = new JPanel ();
 	private JScrollPane scrollPane = new JScrollPane(messageArea);
+	private JFileChooser fc = new JFileChooser();
 	
 	public Viewer(ClientController controller){
 		this.controller = controller;
@@ -50,12 +51,7 @@ public class Viewer extends JPanel implements ActionListener, KeyListener{
 		btnSend.addActionListener(this);
 		messageArea.setEditable(false);
 		connectedUsers.setEditable(false);
-		getImagebtn.addActionListener(new ActionListener(){
-				public void actionPerformed(ActionEvent event){
-					controller.sendObject(new JFileChooser());
-				}
-			}
-		);
+		getImagebtn.addActionListener(this);
 		
 		add(panelWest, BorderLayout.WEST);
 		add(panelSouth, BorderLayout.SOUTH);
@@ -79,9 +75,14 @@ public class Viewer extends JPanel implements ActionListener, KeyListener{
 	}
 
 	public void actionPerformed(ActionEvent e) {
+		if(e.getSource()==btnSend){
 		System.out.println("Du klickade på enter/skicka");
 		controller.sendObject((Object)messageInput.getText());
 		messageInput.setText("");
+		}
+		if(e.getSource() == getImagebtn){
+			controller.sendObject((Object) fc.showOpenDialog(null));
+		}
 	}
 	
 	public void keyPressed(KeyEvent e){
