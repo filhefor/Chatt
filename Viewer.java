@@ -14,7 +14,7 @@ public class Viewer extends JPanel implements ActionListener, KeyListener{
 	private ClientController controller;
 	private JTextArea messageInput = new JTextArea();
 	private JTextArea messageArea = new JTextArea();	
-	private JTextField messageUsers= new JTextField();
+	private JTextArea connectedUsers= new JTextArea();
 
 	private JButton sendButton = new JButton("Skicka");
 	private JButton imageButton = new JButton("Lägg till bild");
@@ -62,7 +62,6 @@ public class Viewer extends JPanel implements ActionListener, KeyListener{
     
 		messageArea.setEditable(false);
 		connectedUsers.setEditable(false);
-	  messageUsers.setEditable(false);
     
 		add(panelWest, BorderLayout.WEST);
 		add(panelSouth, BorderLayout.SOUTH);
