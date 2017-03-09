@@ -52,7 +52,7 @@ public class Message implements Serializable{
 		return message;
 	}
 	
-	public ArrayList getUsernameList() {
+	public ArrayList<String> getUsernameList() {
 		return usernameList;
 	}
 	

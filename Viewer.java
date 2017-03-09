@@ -73,7 +73,7 @@ public class Viewer extends JPanel implements ActionListener, KeyListener{
 	
 	public void updateChat(Message o){
 //		if(o.getRecipients().length <= 0 || o.getSender().equals(controller.getUsername())){
-			messageArea.append(o.getMessage() + "/n");
+			messageArea.append(o.getMessage() + "\n");
 //		}else{
 //			String[] arr = o.getRecipients();
 //			for(int i = 0; i < arr.length; i++){

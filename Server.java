@@ -49,9 +49,10 @@ public class Server implements Runnable {
 		for(int i = 0; i < list.size(); i++) {
 			usernameList.add(list.get(i).username);
 		}
+		Message message = new Message(usernameList);
 		for (int i = 0; i < list.size(); i++) {
 			ClientHandler sendClient = list.get(i);
-			sendClient.writeMessage(new Message(usernameList));
+			sendClient.writeMessage(message);
 		}
 	}
 
@@ -106,19 +107,20 @@ public class Server implements Runnable {
 		}
 
 		public void run() {
+			try {
+				newUser();
+			} catch (IOException e2) {
+				// TODO Auto-generated catch block
+				e2.printStackTrace();
+			}
 			while (true) {
 				try {
-
-					if (!usernameList.isEmpty()) {
-						newUser();
-					}
 					message = input.readObject();
 					System.out.println(message);
 					messageList.add(message);
 					sendMessage(message);
 				} catch (IOException e) {
 					close();
-					e.printStackTrace();
 					System.out.println(username + " kopplade ner");
 					try {
 						removeUser(username);

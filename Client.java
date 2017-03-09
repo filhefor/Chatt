@@ -54,7 +54,6 @@ public class Client implements Observer {
 				output = new ObjectOutputStream(socket.getOutputStream());
 				output.writeObject(username);
 				output.flush();
-				output.writeObject("ASdjwjqw");
 			} catch (IOException ioe) {
 
 			}
