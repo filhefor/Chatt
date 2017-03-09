@@ -52,6 +52,10 @@ public class ClientController extends Observable{
 
 	}
 	
+	public void sendImage(String image) {
+		
+	}
+	
 	public static void main(String[] args) {
 		new ClientController();
 	}
