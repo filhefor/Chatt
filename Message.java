@@ -1,26 +1,42 @@
 package gu;
 
+import java.util.ArrayList;
+
 import javax.swing.ImageIcon;
 
 public class Message {
 	private String[] recipients;
-	private String recipient;
+	private ArrayList usernameList;
 	private String sender;
 	private ImageIcon image = null;
 	private String message;
+	private String type;
 	
-	public Message(String sender, String recipient, String message, ImageIcon image){
+	
+	public Message(String sender, String[] recipients, ImageIcon image){
 		this.sender=sender;
-		this.recipient=recipient;
-		this.message=message;
+		this.recipients=recipients;
 		this.image=image;
+		this.type = "image";
 	}
+	public Message(String sender, String[] recipients, String message) {
+		this.sender = sender;
+		this.recipients = recipients;
+		this.message = message;
+		this.type = "message";
+	}
+	
+	public Message(ArrayList usernameList) {
+		this.usernameList = usernameList;
+		this.type = "usernameList";
+	}
+	
 	public String[] getRecipients() {
 		return recipients;
 	}
-
-	public String getRecipient() {
-		return recipient;
+	
+	public String getType() {
+		return type;
 	}
 	
 	public String getSender() {
@@ -33,6 +49,10 @@ public class Message {
 	
 	public String getMessage() {
 		return message;
+	}
+	
+	public ArrayList usernameList() {
+		return usernameList;
 	}
 	
 	
