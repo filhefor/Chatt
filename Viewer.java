@@ -36,7 +36,7 @@ public class Viewer extends JPanel implements ActionListener, KeyListener{
 		add(messageArea,BorderLayout.CENTER);
 		add(messageInput, BorderLayout.SOUTH);
 		add(messageUsers, BorderLayout.WEST);
-		add(btnSend, BorderLayout.EAST);
+		add(btnSend, BorderLayout.SOUTH);
 		
 		messageArea.addKeyListener(this);
 		btnSend.addActionListener(this);
