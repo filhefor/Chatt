@@ -93,7 +93,7 @@ public class Server implements Runnable {
 				output = new ObjectOutputStream(socket.getOutputStream());
 				input = new ObjectInputStream(socket.getInputStream());
 				username = (String) input.readObject();
-
+				usernameList.add(username);
 				System.out.println("Tagit emot ett username från ny client: "+username);
 				System.out.println("Lagt till "+username+ " till connectedUsers");
 				for (int i = 0; i < messageList.size(); i++) {
@@ -112,14 +112,13 @@ public class Server implements Runnable {
 					if (!usernameList.isEmpty()) {
 						newUser();
 					}
-
-//					message = (String) input.readObject();
 					message = input.readObject();
 					System.out.println(message);
 					messageList.add(message);
 					sendMessage(message);
-				} catch (IOException | ClassNotFoundException e) {
+				} catch (IOException e) {
 					close();
+					e.printStackTrace();
 					System.out.println(username + " kopplade ner");
 					try {
 						removeUser(username);
@@ -127,6 +126,9 @@ public class Server implements Runnable {
 						e1.printStackTrace();
 					}
 					break;
+				} catch (ClassNotFoundException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
 				}
 			}
 		}

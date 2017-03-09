@@ -1,10 +1,11 @@
 package gu;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 
 import javax.swing.ImageIcon;
 
-public class Message {
+public class Message implements Serializable{
 	private String[] recipients;
 	private ArrayList<String> usernameList;
 	private String sender;
