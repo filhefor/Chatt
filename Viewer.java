@@ -2,6 +2,7 @@ package gu;
 
 import java.awt.*;
 import java.awt.event.*;
+import java.util.ArrayList;
 import java.util.logging.FileHandler;
 
 import javax.swing.*;
@@ -60,16 +61,24 @@ public class Viewer extends JPanel implements ActionListener, KeyListener{
 		
 	}
 	
-	public void updateChat(Object o){
-		if(o instanceof String){
-			messageArea.append("\n" + (String)o);
+	public void updateChat(Message o){
+		if(o.getRecipients().length <= 0 || o.getSender().equals(controller.getUsername())){
+			messageArea.append(o.getMessage());
+		}else{
+			String[] arr = o.getRecipients();
+			for(int i = 0; i < arr.length; i++){
+				if(arr[i].equals(controller.getUsername())){
+					messageArea.append(o.getMessage());
+				}
+			}
 		}
+		
 	}
 	
-	public void updateUsers(String user){
-		String users = connectedUsers.getText();
-		if(!users.contains(user)){
-			connectedUsers.setText(connectedUsers.getText()+"\n"+user);
+	public void updateUsers(ArrayList<String> users){
+		connectedUsers.setText("");
+		for(int i = 0; i < users.size(); i++){
+			connectedUsers.append(users.get(i)+"\n");
 		}
 		
 	}
