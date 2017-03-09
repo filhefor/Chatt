@@ -17,7 +17,7 @@ public class Client implements Observer {
 	private ObjectOutputStream output;
 	private ObjectInputStream input;
 
-	public Client(String ip, int port, String userName, ClientController controller) {
+	public Client(String ip, int port, String username, ClientController controller) {
 		System.out.println("Client konstruktor");
 		this.username = username;
 		this.ip = ip;
@@ -54,6 +54,7 @@ public class Client implements Observer {
 				output = new ObjectOutputStream(socket.getOutputStream());
 				output.writeObject(username);
 				output.flush();
+				output.writeObject("ASdjwjqw");
 			} catch (IOException ioe) {
 
 			}
