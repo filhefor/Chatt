@@ -11,19 +11,14 @@ public class ClientController {
 	private Client client;
 	private Viewer viewer = new Viewer(this);
 	private String username;
-	private ClientUI ui = new ClientUI(this);
 
 
-	public ClientController(Client client) {
+	public ClientController() {
 		System.out.println("controller konstruktor");
 
 		showGUI();
 		username = JOptionPane.showInputDialog("Välj användarnamn");
-		Client client = new Client("127.0.0.1", 1337, username, this);
-
-		this.client = client;
-		client.setController(this);
-		showGUI();
+		client	 = new Client("127.0.0.1", 1337, username, this);
 		//client.getData();
 	}
 
@@ -40,6 +35,7 @@ public class ClientController {
 			}
 		});
 	}
+	
 	public void updateChat(Object o) {
 		Message message = (Message) o;
 		if(message.getType().equals("usernameList")) {
@@ -47,6 +43,7 @@ public class ClientController {
 		}
 		else if(message.getType().equals("message")) {
 			viewer.updateChat(message);
+		}
     }
 	
 	public void updateUsers(ArrayList<String> usernameList){
@@ -75,7 +72,6 @@ public class ClientController {
 	}
 	
 	public static void main(String[] args) {
-		Client client = new Client("127.0.0.1", 1337, "filhefor");
-		new ClientController(client);
+		new ClientController();
 	}
 }
