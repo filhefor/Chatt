@@ -14,7 +14,7 @@ public class Server implements Runnable {
 	private ArrayList<String> usernameList = new ArrayList<String>();
 	private LinkedList<Object> messageList = new LinkedList<Object>();
 
-	public Server(int port, int nbrOfThreads) throws IOException {
+	public Server(int port) throws IOException {
 		serverSocket = new ServerSocket(port);
 		server.start();
 
@@ -48,7 +48,7 @@ public class Server implements Runnable {
 		for(int i = 0; i < list.size(); i++) {
 			usernameList.add(list.get(i).username);
 		}
-		for (int i = list.size(); --i >= 0;) {
+		for (int i = 0; i < list.size(); i++) {
 			ClientHandler sendClient = list.get(i);
 			sendClient.writeMessage(new Message(usernameList));
 		}
@@ -83,7 +83,8 @@ public class Server implements Runnable {
 		private ObjectOutputStream output;
 		private int id;
 		private String username;
-		private String message;
+//		private String message;
+		private Object message;
 
 		public ClientHandler(Socket socket) {
 			this.socket = socket;
@@ -109,10 +110,11 @@ public class Server implements Runnable {
 						newUser();
 					}
 
-					message = (String) input.readObject();
+//					message = (String) input.readObject();
+					message = input.readObject();
 					System.out.println(message);
-					messageList.add(username + " - " + message);
-					sendMessage(username + " - " + message);
+					messageList.add(message);
+					sendMessage(message);
 
 				} catch (IOException | ClassNotFoundException e) {
 					close();
@@ -162,7 +164,7 @@ public class Server implements Runnable {
 	}
 
 	public static void main(String[] args) throws IOException {
-		new Server(1337, 100);
+		new Server(1337);
 	}
 
 }

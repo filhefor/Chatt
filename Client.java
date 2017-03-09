@@ -73,34 +73,16 @@ public class Client implements Observer {
 
 				try {
 					message = input.readObject();
-					String msg = (String) message;
-					if (msg.contains("user")) {
-						String[] arr = msg.split(",");
-						connectedUsers.add(arr[1]);
-						
-						for (int i = 0; i < connectedUsers.size(); i++) {
-							controller.updateUsers(connectedUsers.get(i));
-							System.out.println("hej jörgen");
-						}
-						
-
-					} else {
-						System.out.println(message + " från klient");
-						System.out.println(controller);
-						controller.updateChat(message);
-
-					}
-
+					System.out.println(message + " från klient");
+					System.out.println(controller);
+					controller.updateChat(message);
 				} catch (IOException ioe) {
 
 				} catch (ClassNotFoundException cnfe) {
 
 				}
-
 			}
-
 		}
-
 	}
 
 	public Object getObjectToSend() {

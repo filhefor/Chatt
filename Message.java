@@ -6,7 +6,7 @@ import javax.swing.ImageIcon;
 
 public class Message {
 	private String[] recipients;
-	private ArrayList usernameList;
+	private ArrayList<String> usernameList;
 	private String sender;
 	private ImageIcon image = null;
 	private String message;
@@ -26,7 +26,7 @@ public class Message {
 		this.type = "message";
 	}
 	
-	public Message(ArrayList usernameList) {
+	public Message(ArrayList<String> usernameList) {
 		this.usernameList = usernameList;
 		this.type = "usernameList";
 	}
@@ -51,7 +51,7 @@ public class Message {
 		return message;
 	}
 	
-	public ArrayList usernameList() {
+	public ArrayList getUsernameList() {
 		return usernameList;
 	}
 	
