@@ -19,12 +19,12 @@ public class Server implements Runnable {
 		server.start();
 
 	}
-
+	
 	public synchronized void sendMessage(Object obj) {
-		for (int i = list.size(); --i >= 0;) {
+		for(int i = list.size(); --i >= 0;) {
 			ClientHandler sendClient = list.get(i);
-			try {
-				if (!sendClient.writeMessage(obj)) {
+			try{
+				if(!sendClient.writeMessage(obj)) {
 					list.remove(i);
 					System.out.println("Disconnected client");
 				}
@@ -42,6 +42,7 @@ public class Server implements Runnable {
 			newUser();
 		}
 	}
+
 
 	public synchronized void newUser() throws IOException {
 		usernameList.clear();
@@ -61,20 +62,20 @@ public class Server implements Runnable {
 				ClientHandler newClient = new ClientHandler(socket);
 				System.out.println("ClientConnected");
 				list.add(newClient);
-				
-				System.out.println(list.size());
 				newClient.start();
 			}
 			try {
 				serverSocket.close();
-				for (int i = 0; i < list.size(); i++) {
+				for(int i = 0; i < list.size(); i++) {
 					ClientHandler clientClose = list.get(i);
+
 					clientClose.close();
+
 				}
-			} catch (Exception e) {
-			}
+			} catch(Exception e) {
+			} 
 		} catch (IOException e) {
-		}
+	}
 	}
 
 	private class ClientHandler extends Thread {
@@ -92,6 +93,7 @@ public class Server implements Runnable {
 				output = new ObjectOutputStream(socket.getOutputStream());
 				input = new ObjectInputStream(socket.getInputStream());
 				username = (String) input.readObject();
+
 				System.out.println("Tagit emot ett username från ny client: "+username);
 				System.out.println("Lagt till "+username+ " till connectedUsers");
 				for (int i = 0; i < messageList.size(); i++) {
@@ -106,6 +108,7 @@ public class Server implements Runnable {
 		public void run() {
 			while (true) {
 				try {
+
 					if (!usernameList.isEmpty()) {
 						newUser();
 					}
@@ -115,7 +118,6 @@ public class Server implements Runnable {
 					System.out.println(message);
 					messageList.add(message);
 					sendMessage(message);
-
 				} catch (IOException | ClassNotFoundException e) {
 					close();
 					System.out.println(username + " kopplade ner");
@@ -128,17 +130,19 @@ public class Server implements Runnable {
 				}
 			}
 		}
-
+		
 		private synchronized boolean writeMessage(Object obj) throws IOException {
-			if (!socket.isConnected()) {
+			if(!socket.isConnected()) {
 				socket.close();
 				return false;
 			}
 			try {
 				System.out.println(obj + "Hej");
 				output.writeObject(obj);
+
 				output.flush();
 			} catch (IOException e) {
+
 			}
 			return true;
 		}
@@ -155,7 +159,7 @@ public class Server implements Runnable {
 			} catch (Exception e) {
 			}
 			try {
-				if (socket != null)
+				if (socket != null) 
 					socket.close();
 			} catch (Exception e) {
 			}
@@ -164,7 +168,9 @@ public class Server implements Runnable {
 	}
 
 	public static void main(String[] args) throws IOException {
+
 		new Server(1337);
+
 	}
 
 }
