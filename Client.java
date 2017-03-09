@@ -6,11 +6,11 @@ import java.net.*;
 import java.util.Observable;
 import java.util.Observer;
 
-public class Client implements Observer {
+public class Client{
 	private ClientController controller;
 	private String username;
 	private Socket socket;
-	private Object objectToSend;
+	private Message objectToSend;
 	private boolean okToSend = false;
 	private String ip;
 	private int port;
@@ -31,7 +31,7 @@ public class Client implements Observer {
 		this.controller = controller;
 	}
 
-	public void sendObject(Object o) {
+	public void sendObject(Message o) {
 		objectToSend = o;
 	}
 
@@ -61,12 +61,13 @@ public class Client implements Observer {
 		}
 
 		public void run() {
-			Object message;
+			Message message;
 			while (true) {
 				try {
-					message = input.readObject();
+					message = (Message)input.readObject();
 					System.out.println(message + " från klient");
 					System.out.println(controller);
+					System.out.println(message.getUsernameList());
 					controller.updateChat(message);
 				} catch (IOException ioe) {
 
@@ -81,7 +82,7 @@ public class Client implements Observer {
 		return objectToSend;
 	}
 
-	public void setObjectToSend(Object objectToSend) {
+	public void setObjectToSend(Message objectToSend) {
 		this.objectToSend = objectToSend;
 		try {
 			//System.out.println("objekt: "+this.objectToSend);
@@ -100,11 +101,6 @@ public class Client implements Observer {
 
 	public void setOkToSend(boolean okToSend) {
 		this.okToSend = okToSend;
-	}
-
-	@Override
-	public void update(Observable o, Object arg) {
-		objectToSend = arg;
 	}
 
 }

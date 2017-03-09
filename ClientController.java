@@ -36,8 +36,8 @@ public class ClientController {
 		});
 	}
 	
-	public void updateChat(Object o) {
-		Message message = (Message) o;
+	public void updateChat(Message o) {
+		Message message = o;
 		if(message.getType().equals("usernameList")) {
 			updateUsers(message.getUsernameList());
 		}
@@ -46,12 +46,12 @@ public class ClientController {
 		}
     }
 	
-	public void updateUsers(ArrayList<String> usernameList){
-		viewer.updateUsers(usernameList);
+	public void updateUsers(String[] strings){
+		viewer.updateUsers(strings);
 	}
 
 
-	public void sendObject(Object o) {
+	public void sendObject(Message o) {
 		client.setOkToSend(true);
 		client.setObjectToSend(o);
 

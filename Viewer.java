@@ -15,7 +15,7 @@ public class Viewer extends JPanel implements ActionListener, KeyListener{
 	private ClientController controller;
 	private JTextField messageInput = new JTextField();
 	private JTextArea messageArea = new JTextArea();	
-	private JTextArea connectedUsers= new JTextArea();
+	private JTextArea connectedUsers= new JTextArea("Aktiva användare: \n");
 
 	private JButton sendButton = new JButton("Skicka");
 	private JButton imageButton = new JButton("Lägg till bild");
@@ -72,24 +72,27 @@ public class Viewer extends JPanel implements ActionListener, KeyListener{
 	}
 	
 	public void updateChat(Message o){
-//		if(o.getRecipients().length <= 0 || o.getSender().equals(controller.getUsername())){
-			messageArea.append(o.getMessage() + "\n");
-//		}else{
-//			String[] arr = o.getRecipients();
-//			for(int i = 0; i < arr.length; i++){
-//				if(arr[i].equals(controller.getUsername())){
-//					messageArea.append(o.getMessage());
-//				}
-//			}
-//		}
+		if(o.getRecipients().length <= 0 || o.getSender().equals(controller.getUsername())){
+			messageArea.append(o.getSender() + ": " + o.getMessage() + "\n");
+		}else{
+			String[] arr = o.getRecipients();
+			for(int i = 0; i < arr.length; i++){
+				if(arr[i].equals(controller.getUsername())){
+					messageArea.append(o.getMessage());
+				}
+			}
+		}
 		
 	}
 
 	
-	public void updateUsers(ArrayList<String> users){
-		connectedUsers.setText("");
-		for(int i = 0; i < users.size(); i++){
-			connectedUsers.append(users.get(i)+"\n");
+	public void updateUsers(String[] strings){
+		connectedUsers.setText("Aktiva användare:\n");
+		for(int i = 0; i < strings.length; i++) {
+		System.out.println(strings[i]);
+		}
+		for(int i = 0; i < strings.length; i++){
+			connectedUsers.append(strings[i]+"\n");
 		}
 		
 	}

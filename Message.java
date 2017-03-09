@@ -7,7 +7,7 @@ import javax.swing.ImageIcon;
 
 public class Message implements Serializable{
 	private String[] recipients;
-	private ArrayList<String> usernameList;
+	private String[] usernameList;
 	private String sender;
 	private ImageIcon image = null;
 	private String message;
@@ -27,7 +27,7 @@ public class Message implements Serializable{
 		this.type = "message";
 	}
 	
-	public Message(ArrayList<String> usernameList) {
+	public Message(String[] usernameList) {
 		this.usernameList = usernameList;
 		this.type = "usernameList";
 	}
@@ -52,7 +52,7 @@ public class Message implements Serializable{
 		return message;
 	}
 	
-	public ArrayList<String> getUsernameList() {
+	public String[] getUsernameList() {
 		return usernameList;
 	}
 	

@@ -12,7 +12,7 @@ public class Server implements Runnable {
 	private boolean on = true;
 	private ArrayList<ClientHandler> list = new ArrayList<ClientHandler>();
 	private ArrayList<String> usernameList = new ArrayList<String>();
-	private LinkedList<Object> messageList = new LinkedList<Object>();
+	private LinkedList<Message> messageList = new LinkedList<Message>();
 
 	public Server(int port) throws IOException {
 		serverSocket = new ServerSocket(port);
@@ -20,8 +20,8 @@ public class Server implements Runnable {
 
 	}
 	
-	public synchronized void sendMessage(Object obj) {
-		for(int i = list.size(); --i >= 0;) {
+	public synchronized void sendMessage(Message obj) {
+		for(int i = 0; i < list.size(); i++) {
 			ClientHandler sendClient = list.get(i);
 			try{
 				if(!sendClient.writeMessage(obj)) {
@@ -49,11 +49,18 @@ public class Server implements Runnable {
 		for(int i = 0; i < list.size(); i++) {
 			usernameList.add(list.get(i).username);
 		}
-		Message message = new Message(usernameList);
-		for (int i = 0; i < list.size(); i++) {
-			ClientHandler sendClient = list.get(i);
-			sendClient.writeMessage(message);
+		System.out.println(usernameList);
+		String[] usernames= new String[usernameList.size()];
+		for(int i = 0; i < list.size(); i++) {
+			usernames[i] = usernameList.get(i);
 		}
+		Message message = new Message(usernames);
+//		for (int i = 0; i < list.size(); i++) {
+//			ClientHandler sendClient = list.get(i);
+//			sendClient.writeMessage(message);
+		sendMessage(message);
+			System.out.println(message.getUsernameList());
+//		}
 	}
 
 	public void run() {
@@ -86,7 +93,7 @@ public class Server implements Runnable {
 		private int id;
 		private String username;
 //		private String message;
-		private Object message;
+		private Message message;
 
 		public ClientHandler(Socket socket) {
 			this.socket = socket;
@@ -107,15 +114,16 @@ public class Server implements Runnable {
 		}
 
 		public void run() {
-			try {
-				newUser();
-			} catch (IOException e2) {
-				// TODO Auto-generated catch block
-				e2.printStackTrace();
-			}
+//			try {
+//				newUser();
+//			} catch (IOException e2) {
+//				// TODO Auto-generated catch block
+//				e2.printStackTrace();
+//			}
 			while (true) {
 				try {
-					message = input.readObject();
+					newUser();
+					message = (Message)input.readObject();
 					System.out.println(message);
 					messageList.add(message);
 					sendMessage(message);
@@ -135,7 +143,7 @@ public class Server implements Runnable {
 			}
 		}
 		
-		private synchronized boolean writeMessage(Object obj) throws IOException {
+		private synchronized boolean writeMessage(Message obj) throws IOException {
 			if(!socket.isConnected()) {
 				socket.close();
 				return false;
@@ -143,6 +151,8 @@ public class Server implements Runnable {
 			try {
 				System.out.println(obj + "Hej");
 				output.writeObject(obj);
+				Message message = (Message) obj;
+				System.out.println(message.getUsernameList() + " i send till " + username);
 
 				output.flush();
 			} catch (IOException e) {
