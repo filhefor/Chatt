@@ -8,10 +8,11 @@ import java.util.logging.FileHandler;
 import javax.swing.*;
 
 public class Viewer extends JPanel implements ActionListener, KeyListener{
+	
 	private ClientController controller;
-	private JTextArea messageInput = new JTextArea();
+	private JTextField messageInput = new JTextField();
 	private JTextArea messageArea = new JTextArea();	
-	private JTextField messageUsers= new JTextField();
+	private JTextArea connectedUsers= new JTextArea();
 
 	private JButton btnSend = new JButton("Skicka");
 
@@ -56,7 +57,7 @@ public class Viewer extends JPanel implements ActionListener, KeyListener{
 
 		connectedUsers.setEditable(false);
 		getImagebtn.addActionListener(this);
-		messageUsers.setEditable(false);
+		
     
 		add(panelWest, BorderLayout.WEST);
 		add(panelSouth, BorderLayout.SOUTH);
