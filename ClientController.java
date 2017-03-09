@@ -67,6 +67,10 @@ public class ClientController {
 		return username;
 	}
 	
+	public void sendImage(String image) {
+		
+	}
+	
 	public static void main(String[] args) {
 		new ClientController();
 	}
