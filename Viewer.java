@@ -141,7 +141,7 @@ public class Viewer extends JPanel implements ActionListener, KeyListener{
 		String[] arr = {};
 		
 		image = new ImageIcon(fileChooser.getSelectedFile().getAbsolutePath());
-		controller.createImageMessage(arr,image);
+		controller.createImageMessage(controller.getUsername(),arr,image);
 		System.out.println(fileChooser.getSelectedFile().getAbsolutePath());
 		
 	}

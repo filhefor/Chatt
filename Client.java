@@ -8,7 +8,7 @@ import java.util.Observer;
 
 public class Client implements Observer {
 	private ClientController controller;
-	private String userName;
+	private String username;
 	private Socket socket;
 	private Object objectToSend;
 	private boolean okToSend = false;
@@ -17,9 +17,9 @@ public class Client implements Observer {
 	private ObjectOutputStream output;
 	private ObjectInputStream input;
 
-	public Client(String ip, int port, String userName, ClientController controller) {
+	public Client(String ip, int port, String username, ClientController controller) {
 		System.out.println("Client konstruktor");
-		this.userName = userName;
+		this.username = username;
 		this.ip = ip;
 		this.port = port;
 		this.controller = controller;
@@ -52,6 +52,7 @@ public class Client implements Observer {
 			try {
 				input = new ObjectInputStream(socket.getInputStream());
 				output = new ObjectOutputStream(socket.getOutputStream());
+				output.writeObject("ASdjwjqw");
 			} catch (IOException ioe) {
 
 			}
