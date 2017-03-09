@@ -59,6 +59,12 @@ public class ClientController extends Observable{
 		client.setObjectToSend(o);
 
 	}
+	public void createImageMessage(String sender, String[] recipients, ImageIcon image){
+		new Message(sender, recipients, image);
+	}
+	public void createTextMessage(String sender, String[] recipients, String message){
+		new Message(sender,recipients,message);
+	}
 	
 	public String getUsername() {
 		return username;
