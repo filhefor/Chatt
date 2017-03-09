@@ -42,7 +42,10 @@ public class ClientController {
 			updateUsers(message.getUsernameList());
 		}
 		else if(message.getType().equals("message")) {
-			viewer.updateChat(message);
+			viewer.updateChatText(message);
+		}
+		else if (message.getType().equals("image")) {
+			viewer.updateChatImage(message);
 		}
     }
 	

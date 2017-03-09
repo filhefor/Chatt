@@ -9,14 +9,21 @@ import javax.imageio.ImageIO;
 import javax.swing.*;
 import javax.swing.filechooser.FileFilter;
 import javax.swing.filechooser.FileNameExtensionFilter;
+import javax.swing.text.BadLocationException;
+import javax.swing.text.DefaultStyledDocument;
+import javax.swing.text.Document;
+import javax.swing.text.Style;
+import javax.swing.text.StyleConstants;
+import javax.swing.text.StyledDocument;
 
 public class Viewer extends JPanel implements ActionListener, KeyListener{
 	
 	private ClientController controller;
 	private JTextField messageInput = new JTextField();
-	private JTextArea messageArea = new JTextArea();	
+	private StyledDocument doc = new DefaultStyledDocument();
+	private Style imgStyle = doc.addStyle("imgStyle", null);
+	private JTextPane messageArea = new JTextPane(doc);	
 	private JTextArea connectedUsers= new JTextArea("Aktiva användare: \n");
-
 	private JButton sendButton = new JButton("Skicka");
 	private JButton imageButton = new JButton("Lägg till bild");
 	
@@ -63,6 +70,8 @@ public class Viewer extends JPanel implements ActionListener, KeyListener{
     
 		messageArea.setEditable(false);
 		connectedUsers.setEditable(false);
+		messageArea.setAutoscrolls(true);
+		messageArea.setCaretPosition(doc.getLength());
     
 		add(panelWest, BorderLayout.WEST);
 		add(panelSouth, BorderLayout.SOUTH);
@@ -71,18 +80,42 @@ public class Viewer extends JPanel implements ActionListener, KeyListener{
 
 	}
 	
-	public void updateChat(Message o){
+	public void updateChatText(Message o){
+		try{
 		if(o.getRecipients().length <= 0 || o.getSender().equals(controller.getUsername())){
-			messageArea.append(o.getSender() + ": " + o.getMessage() + "\n");
+//			messageArea.append(o.getSender() + ": " + o.getMessage() + "\n");
+			doc.insertString(doc.getLength(), o.getSender() + ": " +o.getMessage() + "\n", null);
 		}else{
 			String[] arr = o.getRecipients();
 			for(int i = 0; i < arr.length; i++){
 				if(arr[i].equals(controller.getUsername())){
-					messageArea.append(o.getMessage());
+					doc.insertString(doc.getLength(), o.getMessage(), null);
 				}
 			}
 		}
+		}catch(BadLocationException e) {}
 		
+	}
+	
+	public void updateChatImage(Message o) {
+		if(o.getRecipients().length <= 0 || o.getSender().equals(controller.getUsername())){
+			messageArea.insertIcon(o.getImage());
+			
+		}else{
+			String[] arr = o.getRecipients();
+			for(int i = 0; i < arr.length; i++){
+				if(arr[i].equals(controller.getUsername())){
+					Image image = o.getImage().getImage().getScaledInstance(320, 210,
+							java.awt.Image.SCALE_SMOOTH);
+					ImageIcon newImage = new ImageIcon(image);
+					StyleConstants.setIcon(imgStyle, newImage);
+					try{
+					doc.insertString(doc.getLength(), "ignored", imgStyle);
+					doc.insertString(doc.getLength(), "\n", null);
+					} catch(BadLocationException e) {}
+				}
+			}
+		}
 	}
 
 	
