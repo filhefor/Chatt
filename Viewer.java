@@ -2,6 +2,7 @@ package gu;
 
 import java.awt.*;
 import java.awt.event.*;
+import java.util.logging.FileHandler;
 
 import javax.swing.*;
 
@@ -14,7 +15,9 @@ public class Viewer extends JPanel implements ActionListener, KeyListener{
 	private JTextArea connectedUsers= new JTextArea();
 
 	private JButton btnSend = new JButton("Skicka");
+	private JButton getImagebtn = new JButton("Lägg till bild");
 	
+	private JPanel btnPanel = new JPanel();
 	private JPanel panelSouth = new JPanel();
 	private JPanel panelCenter = new JPanel();
 	private JPanel panelWest = new JPanel ();
@@ -25,26 +28,39 @@ public class Viewer extends JPanel implements ActionListener, KeyListener{
 		setPreferredSize(new Dimension(700,600));
 		setLayout(new BorderLayout());
 		
-		messageInput.setPreferredSize(new Dimension(450, 100));
-		scrollPane.setPreferredSize(new Dimension(400,400));
-		connectedUsers.setPreferredSize(new Dimension(150,450));
+		btnSend.setPreferredSize(new Dimension(130,35));
+		getImagebtn.setPreferredSize(new Dimension(130,35));
+		btnPanel.setPreferredSize(new Dimension(170,100));
+		messageInput.setPreferredSize(new Dimension(515, 100));
+		scrollPane.setPreferredSize(new Dimension(510,480));
+		connectedUsers.setPreferredSize(new Dimension(150,480));
+		
 		connectedUsers.setBorder(BorderFactory.createLineBorder(Color.BLACK));
+		scrollPane.setBorder(BorderFactory.createLineBorder(Color.BLACK));
+		messageInput.setBorder(BorderFactory.createLineBorder(Color.BLACK));
 		
-		
+		btnPanel.add(getImagebtn, BorderLayout.NORTH);
+		btnPanel.add(btnSend, BorderLayout.SOUTH);
 		panelWest.add(connectedUsers, BorderLayout.CENTER);
 		panelCenter.add(scrollPane, BorderLayout.CENTER);
 		panelSouth.add(messageInput, BorderLayout.CENTER);
-		panelSouth.add(btnSend, BorderLayout.EAST);
-		
+		panelSouth.add(btnPanel, BorderLayout.EAST);
 		
 		messageInput.addKeyListener(this);
 		btnSend.addActionListener(this);
 		messageArea.setEditable(false);
 		connectedUsers.setEditable(false);
+		getImagebtn.addActionListener(new ActionListener(){
+				public void actionPerformed(ActionEvent event){
+					controller.sendObject(new JFileChooser());
+				}
+			}
+		);
 		
 		add(panelWest, BorderLayout.WEST);
 		add(panelSouth, BorderLayout.SOUTH);
 		add(panelCenter, BorderLayout.CENTER);
+		
 		
 	}
 	
