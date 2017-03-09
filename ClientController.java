@@ -1,23 +1,30 @@
 package gu;
 
 import java.awt.Dimension;
+
 import java.util.ArrayList;
-import java.util.Observable;
 
 import javax.swing.*;
 
 
-public class ClientController extends Observable{
+public class ClientController {
 	private Client client;
 	private Viewer viewer = new Viewer(this);
 	private String username;
+	private ClientUI ui = new ClientUI(this);
 
-	public ClientController() {
+
+	public ClientController(Client client) {
 		System.out.println("controller konstruktor");
+
 		showGUI();
 		username = JOptionPane.showInputDialog("Välj användarnamn");
 		Client client = new Client("127.0.0.1", 1337, username, this);
+
 		this.client = client;
+		client.setController(this);
+		showGUI();
+		//client.getData();
 	}
 
 	public void showGUI() {
@@ -26,8 +33,9 @@ public class ClientController extends Observable{
 				JFrame frame = new JFrame("Client");
 				frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 				frame.add(viewer);
+				frame.setLocation(350, 150);
 				frame.pack();
-				frame.setMinimumSize(new Dimension(600,500));
+				frame.setMinimumSize(new Dimension(500,500));
 				frame.setVisible(true);
 			}
 		});
@@ -39,20 +47,12 @@ public class ClientController extends Observable{
 		}
 		else if(message.getType().equals("message")) {
 			viewer.updateChat(message);
-		}
-//		if(o instanceof String){
-//			String stringMessage = (String)o;
-//			viewer.updateChat(stringMessage);
-//		}else if(o instanceof ImageIcon){
-//			ImageIcon imageMessage = (ImageIcon)o;
-//			viewer.updateChat(imageMessage);
-//		}
-		
-	}
+    }
 	
 	public void updateUsers(ArrayList<String> usernameList){
 		viewer.updateUsers(usernameList);
 	}
+
 
 	public void sendObject(Object o) {
 		client.setOkToSend(true);
@@ -71,6 +71,7 @@ public class ClientController extends Observable{
 	}
 	
 	public static void main(String[] args) {
-		new ClientController();
+		Client client = new Client("127.0.0.1", 1337, "filhefor");
+		new ClientController(client);
 	}
 }

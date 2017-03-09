@@ -8,14 +8,13 @@ import java.util.logging.FileHandler;
 import javax.swing.*;
 
 public class Viewer extends JPanel implements ActionListener, KeyListener{
-	
 	private ClientController controller;
-	
-	private JTextField messageInput = new JTextField();
+	private JTextArea messageInput = new JTextArea();
 	private JTextArea messageArea = new JTextArea();	
-	private JTextArea connectedUsers= new JTextArea();
+	private JTextField messageUsers= new JTextField();
 
 	private JButton btnSend = new JButton("Skicka");
+
 	private JButton getImagebtn = new JButton("Lägg till bild");
 	
 	private JPanel btnPanel = new JPanel();
@@ -24,12 +23,14 @@ public class Viewer extends JPanel implements ActionListener, KeyListener{
 	private JPanel panelWest = new JPanel ();
 	private JScrollPane scrollPane = new JScrollPane(messageArea);
 	private JFileChooser fc = new JFileChooser();
+
 	
 	public Viewer(ClientController controller){
 		this.controller = controller;
 		setPreferredSize(new Dimension(700,600));
 		setLayout(new BorderLayout());
 		
+
 		btnSend.setPreferredSize(new Dimension(130,35));
 		getImagebtn.setPreferredSize(new Dimension(130,35));
 		btnPanel.setPreferredSize(new Dimension(170,100));
@@ -47,18 +48,21 @@ public class Viewer extends JPanel implements ActionListener, KeyListener{
 		panelCenter.add(scrollPane, BorderLayout.CENTER);
 		panelSouth.add(messageInput, BorderLayout.CENTER);
 		panelSouth.add(btnPanel, BorderLayout.EAST);
+
 		
-		messageInput.addKeyListener(this);
+		messageArea.addKeyListener(this);
 		btnSend.addActionListener(this);
 		messageArea.setEditable(false);
+
 		connectedUsers.setEditable(false);
 		getImagebtn.addActionListener(this);
-		
+		messageUsers.setEditable(false);
+    
 		add(panelWest, BorderLayout.WEST);
 		add(panelSouth, BorderLayout.SOUTH);
 		add(panelCenter, BorderLayout.CENTER);
 		
-		
+
 	}
 	
 	public void updateChat(Message o){
@@ -74,6 +78,7 @@ public class Viewer extends JPanel implements ActionListener, KeyListener{
 		}
 		
 	}
+
 	
 	public void updateUsers(ArrayList<String> users){
 		connectedUsers.setText("");
@@ -82,6 +87,7 @@ public class Viewer extends JPanel implements ActionListener, KeyListener{
 		}
 		
 	}
+
 
 	public void actionPerformed(ActionEvent e) {
 		if(e.getSource()==btnSend){
