@@ -5,7 +5,10 @@ import java.awt.event.*;
 import java.util.ArrayList;
 import java.util.logging.FileHandler;
 
+import javax.imageio.ImageIO;
 import javax.swing.*;
+import javax.swing.filechooser.FileFilter;
+import javax.swing.filechooser.FileNameExtensionFilter;
 
 public class Viewer extends JPanel implements ActionListener, KeyListener{
 	private ClientController controller;
@@ -13,9 +16,8 @@ public class Viewer extends JPanel implements ActionListener, KeyListener{
 	private JTextArea messageArea = new JTextArea();	
 	private JTextField messageUsers= new JTextField();
 
-	private JButton btnSend = new JButton("Skicka");
-
-	private JButton getImagebtn = new JButton("Lägg till bild");
+	private JButton sendButton = new JButton("Skicka");
+	private JButton imageButton = new JButton("Lägg till bild");
 	
 	private JPanel btnPanel = new JPanel();
 	private JPanel panelSouth = new JPanel();
@@ -25,14 +27,18 @@ public class Viewer extends JPanel implements ActionListener, KeyListener{
 	private JFileChooser fc = new JFileChooser();
 
 	
+	private JFileChooser fileChooser = new JFileChooser();
+	private FileFilter imageFilter = new FileNameExtensionFilter("Image Files", ImageIO.getReaderFileSuffixes());
+	
+	
 	public Viewer(ClientController controller){
 		this.controller = controller;
 		setPreferredSize(new Dimension(700,600));
 		setLayout(new BorderLayout());
 		
+		sendButton.setPreferredSize(new Dimension(130,35));
+		imageButton.setPreferredSize(new Dimension(130,35));
 
-		btnSend.setPreferredSize(new Dimension(130,35));
-		getImagebtn.setPreferredSize(new Dimension(130,35));
 		btnPanel.setPreferredSize(new Dimension(170,100));
 		messageInput.setPreferredSize(new Dimension(515, 100));
 		scrollPane.setPreferredSize(new Dimension(510,480));
@@ -42,21 +48,21 @@ public class Viewer extends JPanel implements ActionListener, KeyListener{
 		scrollPane.setBorder(BorderFactory.createLineBorder(Color.BLACK));
 		messageInput.setBorder(BorderFactory.createLineBorder(Color.BLACK));
 		
-		btnPanel.add(getImagebtn, BorderLayout.NORTH);
-		btnPanel.add(btnSend, BorderLayout.SOUTH);
+		btnPanel.add(imageButton, BorderLayout.NORTH);
+		btnPanel.add(sendButton, BorderLayout.SOUTH);
 		panelWest.add(connectedUsers, BorderLayout.CENTER);
 		panelCenter.add(scrollPane, BorderLayout.CENTER);
 		panelSouth.add(messageInput, BorderLayout.CENTER);
 		panelSouth.add(btnPanel, BorderLayout.EAST);
-
-		
+    
+		messageInput.addKeyListener(this);
+		sendButton.addActionListener(this);
+    imageButton.addActionListener(this);
 		messageArea.addKeyListener(this);
-		btnSend.addActionListener(this);
+    
 		messageArea.setEditable(false);
-
 		connectedUsers.setEditable(false);
-		getImagebtn.addActionListener(this);
-		messageUsers.setEditable(false);
+	  messageUsers.setEditable(false);
     
 		add(panelWest, BorderLayout.WEST);
 		add(panelSouth, BorderLayout.SOUTH);
@@ -90,20 +96,20 @@ public class Viewer extends JPanel implements ActionListener, KeyListener{
 
 
 	public void actionPerformed(ActionEvent e) {
-		if(e.getSource()==btnSend){
-		System.out.println("Du klickade på enter/skicka");
-		controller.sendObject((Object)messageInput.getText());
-		messageInput.setText("");
+		if(e.getSource() == sendButton) {
+			System.out.println("Du klickade på enter/skicka");
+			controller.sendObject((Object)messageInput.getText());
+			messageInput.setText("");
 		}
-		if(e.getSource() == getImagebtn){
-			controller.sendObject((Object) fc.showOpenDialog(null));
+		if(e.getSource() == imageButton) {
+			fileChooser();
 		}
 	}
 	
 	public void keyPressed(KeyEvent e){
 	    if(e.getKeyCode() == KeyEvent.VK_ENTER){
 	    e.consume();
-	    btnSend.doClick();
+	    sendButton.doClick();
 	    }
 	
 }
@@ -117,6 +123,22 @@ public class Viewer extends JPanel implements ActionListener, KeyListener{
 	@Override
 	public void keyTyped(KeyEvent e) {
 		// TODO Auto-generated method stub
+		
+	}
+	
+	public void fileChooser() {
+		String image;
+		
+		fileChooser.setCurrentDirectory(new java.io.File("C:/Users"));
+		fileChooser.setDialogTitle("Välj bild");
+		fileChooser.setFileFilter(imageFilter);
+		
+		if(fileChooser.showOpenDialog(imageButton) == JFileChooser.APPROVE_OPTION) {
+//			
+		}
+		image = fileChooser.getSelectedFile().getAbsolutePath();
+		controller.sendImage(image);
+		System.out.println(fileChooser.getSelectedFile().getAbsolutePath());
 		
 	}
 }
