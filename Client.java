@@ -72,11 +72,8 @@ public class Client implements Observer {
 				} catch (ClassNotFoundException cnfe) {
 
 				}
-
 			}
-
-		}
-		
+    }
 	}
 
 	public Object getObjectToSend() {
