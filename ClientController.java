@@ -1,21 +1,30 @@
 package gu;
 
 import java.awt.Dimension;
-import java.util.Observable;
+
+import java.util.ArrayList;
 
 import javax.swing.*;
 
 
-public class ClientController extends Observable{
+public class ClientController {
 	private Client client;
 	private Viewer viewer = new Viewer(this);
+	private String username;
+	private ClientUI ui = new ClientUI(this);
 
-	public ClientController() {
+
+	public ClientController(Client client) {
 		System.out.println("controller konstruktor");
+
 		showGUI();
-		String username = JOptionPane.showInputDialog("Välj användarnamn");
+		username = JOptionPane.showInputDialog("Välj användarnamn");
 		Client client = new Client("127.0.0.1", 1337, username, this);
+
 		this.client = client;
+		client.setController(this);
+		showGUI();
+		//client.getData();
 	}
 
 	public void showGUI() {
@@ -24,32 +33,41 @@ public class ClientController extends Observable{
 				JFrame frame = new JFrame("Client");
 				frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 				frame.add(viewer);
+				frame.setLocation(350, 150);
 				frame.pack();
-				frame.setMinimumSize(new Dimension(600,500));
+				frame.setMinimumSize(new Dimension(500,500));
 				frame.setVisible(true);
 			}
 		});
 	}
-
 	public void updateChat(Object o) {
-		if(o instanceof String){
-			String stringMessage = (String)o;
-			viewer.updateChat(stringMessage);
-		}else if(o instanceof ImageIcon){
-			ImageIcon imageMessage = (ImageIcon)o;
-			viewer.updateChat(imageMessage);
+		Message message = (Message) o;
+		if(message.getType().equals("usernameList")) {
+			updateUsers(message.getUsernameList());
 		}
-		
-	}
+		else if(message.getType().equals("message")) {
+			viewer.updateChat(message);
+    }
 	
-	public void updateUsers(String user){
-		viewer.updateUsers(user);
+	public void updateUsers(ArrayList<String> usernameList){
+		viewer.updateUsers(usernameList);
 	}
+
 
 	public void sendObject(Object o) {
 		client.setOkToSend(true);
 		client.setObjectToSend(o);
 
+	}
+	public void createImageMessage(String sender, String[] recipients, ImageIcon image){
+		new Message(sender, recipients, image);
+	}
+	public void createTextMessage(String sender, String[] recipients, String message){
+		new Message(sender,recipients,message);
+	}
+	
+	public String getUsername() {
+		return username;
 	}
 	
 	public void sendImage(String image) {
@@ -57,6 +75,7 @@ public class ClientController extends Observable{
 	}
 	
 	public static void main(String[] args) {
-		new ClientController();
+		Client client = new Client("127.0.0.1", 1337, "filhefor");
+		new ClientController(client);
 	}
 }

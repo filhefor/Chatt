@@ -3,7 +3,8 @@ package gu;
 import java.io.*;
 
 import java.net.*;
-import java.util.*;
+import java.util.Observable;
+import java.util.Observer;
 
 public class Client implements Observer {
 	private ClientController controller;
@@ -15,7 +16,6 @@ public class Client implements Observer {
 	private int port;
 	private ObjectOutputStream output;
 	private ObjectInputStream input;
-	private ArrayList<String> connectedUsers = new ArrayList<String>();
 
 	public Client(String ip, int port, String username, ClientController controller) {
 		System.out.println("Client konstruktor");
@@ -35,6 +35,7 @@ public class Client implements Observer {
 		objectToSend = o;
 	}
 
+
 	private class ServerListener extends Thread {
 		private String ip;
 		private int port;
@@ -51,9 +52,7 @@ public class Client implements Observer {
 			try {
 				input = new ObjectInputStream(socket.getInputStream());
 				output = new ObjectOutputStream(socket.getOutputStream());
-				output.writeObject(username);
-				output.flush();
-					
+				output.writeObject("ASdjwjqw");
 			} catch (IOException ioe) {
 
 			}
@@ -62,45 +61,19 @@ public class Client implements Observer {
 
 		public void run() {
 			Object message;
-			boolean ready = false;
-			try {
-				output.writeObject("rdy");
-				output.flush();
-			} catch (IOException e) {
-				e.printStackTrace();
-			}
 			while (true) {
-
 				try {
 					message = input.readObject();
-					String msg = (String) message;
-					if (msg.contains("user")) {
-						String[] arr = msg.split(",");
-						connectedUsers.add(arr[1]);
-						
-						for (int i = 0; i < connectedUsers.size(); i++) {
-							controller.updateUsers(connectedUsers.get(i));
-							System.out.println("hej jörgen");
-						}
-						
-
-					} else {
-						System.out.println(message + " från klient");
-						System.out.println(controller);
-						controller.updateChat(message);
-
-					}
-
+					System.out.println(message + " från klient");
+					System.out.println(controller);
+					controller.updateChat(message);
 				} catch (IOException ioe) {
 
 				} catch (ClassNotFoundException cnfe) {
 
 				}
-
 			}
-
-		}
-
+    }
 	}
 
 	public Object getObjectToSend() {
@@ -110,7 +83,7 @@ public class Client implements Observer {
 	public void setObjectToSend(Object objectToSend) {
 		this.objectToSend = objectToSend;
 		try {
-			// System.out.println("objekt: "+this.objectToSend);
+			//System.out.println("objekt: "+this.objectToSend);
 			output.writeObject(objectToSend);
 			output.flush();
 

@@ -2,6 +2,7 @@ package gu;
 
 import java.awt.*;
 import java.awt.event.*;
+import java.util.ArrayList;
 import java.util.logging.FileHandler;
 
 import javax.imageio.ImageIO;
@@ -10,12 +11,10 @@ import javax.swing.filechooser.FileFilter;
 import javax.swing.filechooser.FileNameExtensionFilter;
 
 public class Viewer extends JPanel implements ActionListener, KeyListener{
-	
 	private ClientController controller;
-	
-	private JTextField messageInput = new JTextField();
+	private JTextArea messageInput = new JTextArea();
 	private JTextArea messageArea = new JTextArea();	
-	private JTextArea connectedUsers= new JTextArea();
+	private JTextField messageUsers= new JTextField();
 
 	private JButton sendButton = new JButton("Skicka");
 	private JButton imageButton = new JButton("Lägg till bild");
@@ -25,6 +24,8 @@ public class Viewer extends JPanel implements ActionListener, KeyListener{
 	private JPanel panelCenter = new JPanel();
 	private JPanel panelWest = new JPanel ();
 	private JScrollPane scrollPane = new JScrollPane(messageArea);
+	private JFileChooser fc = new JFileChooser();
+
 	
 	private JFileChooser fileChooser = new JFileChooser();
 	private FileFilter imageFilter = new FileNameExtensionFilter("Image Files", ImageIO.getReaderFileSuffixes());
@@ -37,6 +38,7 @@ public class Viewer extends JPanel implements ActionListener, KeyListener{
 		
 		sendButton.setPreferredSize(new Dimension(130,35));
 		imageButton.setPreferredSize(new Dimension(130,35));
+
 		btnPanel.setPreferredSize(new Dimension(170,100));
 		messageInput.setPreferredSize(new Dimension(515, 100));
 		scrollPane.setPreferredSize(new Dimension(510,480));
@@ -52,33 +54,46 @@ public class Viewer extends JPanel implements ActionListener, KeyListener{
 		panelCenter.add(scrollPane, BorderLayout.CENTER);
 		panelSouth.add(messageInput, BorderLayout.CENTER);
 		panelSouth.add(btnPanel, BorderLayout.EAST);
-		
+    
 		messageInput.addKeyListener(this);
 		sendButton.addActionListener(this);
+    imageButton.addActionListener(this);
+		messageArea.addKeyListener(this);
+    
 		messageArea.setEditable(false);
 		connectedUsers.setEditable(false);
-		imageButton.addActionListener(this);		
-		
+	  messageUsers.setEditable(false);
+    
 		add(panelWest, BorderLayout.WEST);
 		add(panelSouth, BorderLayout.SOUTH);
 		add(panelCenter, BorderLayout.CENTER);
 		
-		
+
 	}
 	
-	public void updateChat(Object o){
-		if(o instanceof String){
-			messageArea.append("\n" + (String)o);
-		}
-	}
-	
-	public void updateUsers(String user){
-		String users = connectedUsers.getText();
-		if(!users.contains(user)){
-			connectedUsers.setText(connectedUsers.getText()+"\n"+user);
+	public void updateChat(Message o){
+		if(o.getRecipients().length <= 0 || o.getSender().equals(controller.getUsername())){
+			messageArea.append(o.getMessage());
+		}else{
+			String[] arr = o.getRecipients();
+			for(int i = 0; i < arr.length; i++){
+				if(arr[i].equals(controller.getUsername())){
+					messageArea.append(o.getMessage());
+				}
+			}
 		}
 		
 	}
+
+	
+	public void updateUsers(ArrayList<String> users){
+		connectedUsers.setText("");
+		for(int i = 0; i < users.size(); i++){
+			connectedUsers.append(users.get(i)+"\n");
+		}
+		
+	}
+
 
 	public void actionPerformed(ActionEvent e) {
 		if(e.getSource() == sendButton) {
@@ -89,7 +104,6 @@ public class Viewer extends JPanel implements ActionListener, KeyListener{
 		if(e.getSource() == imageButton) {
 			fileChooser();
 		}
-		
 	}
 	
 	public void keyPressed(KeyEvent e){
