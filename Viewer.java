@@ -72,16 +72,16 @@ public class Viewer extends JPanel implements ActionListener, KeyListener{
 	}
 	
 	public void updateChat(Message o){
-		if(o.getRecipients().length <= 0 || o.getSender().equals(controller.getUsername())){
+//		if(o.getRecipients().length <= 0 || o.getSender().equals(controller.getUsername())){
 			messageArea.append(o.getMessage());
-		}else{
-			String[] arr = o.getRecipients();
-			for(int i = 0; i < arr.length; i++){
-				if(arr[i].equals(controller.getUsername())){
-					messageArea.append(o.getMessage());
-				}
-			}
-		}
+//		}else{
+//			String[] arr = o.getRecipients();
+//			for(int i = 0; i < arr.length; i++){
+//				if(arr[i].equals(controller.getUsername())){
+//					messageArea.append(o.getMessage());
+//				}
+//			}
+//		}
 		
 	}
 
@@ -98,7 +98,9 @@ public class Viewer extends JPanel implements ActionListener, KeyListener{
 	public void actionPerformed(ActionEvent e) {
 		if(e.getSource() == sendButton) {
 			System.out.println("Du klickade på enter/skicka");
-			controller.sendObject((Object)messageInput.getText());
+//			controller.sendObject((Object)messageInput.getText());
+			String[] recipients = {};
+			controller.createTextMessage(recipients, messageInput.getText());
 			messageInput.setText("");
 		}
 		if(e.getSource() == imageButton) {
