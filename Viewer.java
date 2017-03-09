@@ -11,8 +11,9 @@ import javax.swing.filechooser.FileFilter;
 import javax.swing.filechooser.FileNameExtensionFilter;
 
 public class Viewer extends JPanel implements ActionListener, KeyListener{
+	
 	private ClientController controller;
-	private JTextArea messageInput = new JTextArea();
+	private JTextField messageInput = new JTextField();
 	private JTextArea messageArea = new JTextArea();	
 	private JTextArea connectedUsers= new JTextArea();
 
@@ -62,6 +63,9 @@ public class Viewer extends JPanel implements ActionListener, KeyListener{
     
 		messageArea.setEditable(false);
 		connectedUsers.setEditable(false);
+
+		getImagebtn.addActionListener(this);
+
     
 		add(panelWest, BorderLayout.WEST);
 		add(panelSouth, BorderLayout.SOUTH);
