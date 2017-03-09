@@ -55,9 +55,9 @@ public class Viewer extends JPanel implements ActionListener, KeyListener{
 	}
 	
 	public void updateUsers(String user){
-		String users = messageUsers.getText();
+		String users = connectedUsers.getText();
 		if(!users.contains(user)){
-			messageUsers.setText(messageUsers.getText()+"\n"+user);
+			connectedUsers.setText(connectedUsers.getText()+"\n"+user);
 		}
 		
 	}
