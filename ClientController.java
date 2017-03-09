@@ -57,10 +57,10 @@ public class ClientController {
 
 	}
 	public void createImageMessage(String sender, String[] recipients, ImageIcon image){
-		new Message(sender, recipients, image);
+		sendObject(new Message(sender, recipients, image));
 	}
 	public void createTextMessage(String sender, String[] recipients, String message){
-		new Message(sender,recipients,message);
+		sendObject(new Message(sender,recipients,message));
 	}
 	
 	public String getUsername() {
