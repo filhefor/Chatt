@@ -56,8 +56,8 @@ public class ClientController {
 		client.setObjectToSend(o);
 
 	}
-	public void createImageMessage(String sender, String[] recipients, ImageIcon image){
-		sendObject(new Message(sender, recipients, image));
+	public void createImageMessage(String[] recipients, ImageIcon image){
+		sendObject(new Message(username, recipients, image));
 	}
 	public void createTextMessage(String[] recipients, String message){
 		sendObject(new Message(username,recipients,message));
