@@ -34,7 +34,7 @@ public class Server implements Runnable {
 		}
 	}
 	
-	public void removeUSer(String username) throws IOException {
+	public void removeUser(String username) throws IOException {
 		for(int i = 0; i < list.size(); i++) {
 			if(list.get(i).username.equals(username)) {
 				list.remove(i);
@@ -117,7 +117,11 @@ public class Server implements Runnable {
 				} catch (IOException | ClassNotFoundException e) {
 					close();
 					System.out.println(username + " kopplade ner");
-					
+					try {
+						removeUser(username);
+					} catch (IOException e1) {
+						e1.printStackTrace();
+					}
 					break;
 				}
 			}
