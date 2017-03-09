@@ -10,15 +10,15 @@ import javax.swing.*;
 public class ClientController {
 	private Client client;
 	private Viewer viewer = new Viewer(this);
-	private String username;
+	private String userName;
 
 
 	public ClientController() {
 		System.out.println("controller konstruktor");
 
 		showGUI();
-		username = JOptionPane.showInputDialog("Välj användarnamn");
-		client	 = new Client("127.0.0.1", 1337, username, this);
+		userName = JOptionPane.showInputDialog("Välj användarnamn");
+		client	 = new Client("127.0.0.1", 1337, userName, this);
 		//client.getData();
 	}
 
@@ -46,8 +46,8 @@ public class ClientController {
 		}
     }
 	
-	public void updateUsers(ArrayList<String> usernameList){
-		viewer.updateUsers(usernameList);
+	public void updateUsers(ArrayList<String> userNameList){
+		viewer.updateUsers(userNameList);
 	}
 
 
@@ -56,15 +56,15 @@ public class ClientController {
 		client.setObjectToSend(o);
 
 	}
-	public void createImageMessage(String sender, String[] recipients, ImageIcon image){
-		sendObject(new Message(sender, recipients, image));
+	public void createImageMessage(String[] recipients, ImageIcon image){
+		sendObject(new Message(userName, recipients, image));
 	}
-	public void createTextMessage(String sender, String[] recipients, String message){
-		sendObject(new Message(sender,recipients,message));
+	public void createTextMessage(String[] recipients, String message){
+		sendObject(new Message(userName,recipients,message));
 	}
 	
 	public String getUsername() {
-		return username;
+		return userName;
 	}
 	
 	public void sendImage(String image) {
