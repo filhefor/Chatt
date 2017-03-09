@@ -58,14 +58,11 @@ public class Viewer extends JPanel implements ActionListener, KeyListener{
     
 		messageInput.addKeyListener(this);
 		sendButton.addActionListener(this);
-    imageButton.addActionListener(this);
+		imageButton.addActionListener(this);
 		messageArea.addKeyListener(this);
     
 		messageArea.setEditable(false);
 		connectedUsers.setEditable(false);
-
-		getImagebtn.addActionListener(this);
-
     
 		add(panelWest, BorderLayout.WEST);
 		add(panelSouth, BorderLayout.SOUTH);
@@ -130,7 +127,7 @@ public class Viewer extends JPanel implements ActionListener, KeyListener{
 	}
 	
 	public void fileChooser() {
-		String image;
+		ImageIcon image;
 		
 		fileChooser.setCurrentDirectory(new java.io.File("C:/Users"));
 		fileChooser.setDialogTitle("Välj bild");
@@ -139,8 +136,10 @@ public class Viewer extends JPanel implements ActionListener, KeyListener{
 		if(fileChooser.showOpenDialog(imageButton) == JFileChooser.APPROVE_OPTION) {
 //			
 		}
-		image = fileChooser.getSelectedFile().getAbsolutePath();
-		controller.sendImage(image);
+		String[] arr = {};
+		
+		image = new ImageIcon(fileChooser.getSelectedFile().getAbsolutePath());
+		controller.createImageMessage(controller.getUsername(),arr,image);
 		System.out.println(fileChooser.getSelectedFile().getAbsolutePath());
 		
 	}
