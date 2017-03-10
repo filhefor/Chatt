@@ -11,7 +11,6 @@ public class Server implements Runnable {
 	private Thread server = new Thread(this);
 	private boolean on = true;
 	private ArrayList<ClientHandler> list = new ArrayList<ClientHandler>();
-	private ArrayList<String> usernameList = new ArrayList<String>();
 	private LinkedList<Message> messageList = new LinkedList<Message>();
 
 	public Server(int port) throws IOException {
@@ -45,22 +44,12 @@ public class Server implements Runnable {
 
 
 	public synchronized void newUser() throws IOException {
-		usernameList.clear();
+		String[] usernames= new String[list.size()];
 		for(int i = 0; i < list.size(); i++) {
-			usernameList.add(list.get(i).username);
-		}
-		System.out.println(usernameList);
-		String[] usernames= new String[usernameList.size()];
-		for(int i = 0; i < list.size(); i++) {
-			usernames[i] = usernameList.get(i);
+			usernames[i] = list.get(i).username;
 		}
 		Message message = new Message(usernames);
-//		for (int i = 0; i < list.size(); i++) {
-//			ClientHandler sendClient = list.get(i);
-//			sendClient.writeMessage(message);
 		sendMessage(message);
-			System.out.println(message.getUsernameList());
-//		}
 	}
 
 	public void run() {
@@ -101,7 +90,7 @@ public class Server implements Runnable {
 				output = new ObjectOutputStream(socket.getOutputStream());
 				input = new ObjectInputStream(socket.getInputStream());
 				username = (String) input.readObject();
-				usernameList.add(username);
+//				usernameList.add(username);
 				System.out.println("Tagit emot ett username från ny client: "+username);
 				System.out.println("Lagt till "+username+ " till connectedUsers");
 				for (int i = 0; i < messageList.size(); i++) {

@@ -21,7 +21,7 @@ public class Viewer extends JPanel implements ActionListener, KeyListener{
 	private ClientController controller;
 	private JTextField messageInput = new JTextField();
 	private StyledDocument doc = new DefaultStyledDocument();
-	private Style imgStyle = doc.addStyle("imgStyle", null);
+	private Style imgStyle;
 	private JTextPane messageArea = new JTextPane(doc);	
 	private JTextArea connectedUsers= new JTextArea("Aktiva användare: \n");
 	private JButton sendButton = new JButton("Skicka");
@@ -110,9 +110,12 @@ public class Viewer extends JPanel implements ActionListener, KeyListener{
 					ImageIcon newImage = new ImageIcon(image);
 					StyleConstants.setIcon(imgStyle, newImage);
 					try{
-					doc.insertString(doc.getLength(), "ignored", imgStyle);
+					doc.insertString(doc.getLength(), "ignored text", imgStyle);
 					doc.insertString(doc.getLength(), "\n", null);
-					} catch(BadLocationException e) {}
+					doc.insertString(doc.getLength(), "\n", null);
+					} catch(BadLocationException e) {
+						e.printStackTrace();
+					}
 				}
 			}
 		}
