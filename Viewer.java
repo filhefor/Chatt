@@ -21,7 +21,7 @@ public class Viewer extends JPanel implements ActionListener, KeyListener{
 	private ClientController controller;
 	private JTextField messageInput = new JTextField();
 	private StyledDocument doc = new DefaultStyledDocument();
-	private Style imgStyle;
+	private Style imgStyle = doc.addStyle("imgStyle", null);;
 	private JTextPane messageArea = new JTextPane(doc);	
 	private JTextArea connectedUsers= new JTextArea("Aktiva användare: \n");
 	private JButton sendButton = new JButton("Skicka");
@@ -99,7 +99,16 @@ public class Viewer extends JPanel implements ActionListener, KeyListener{
 	
 	public void updateChatImage(Message o) {
 		if(o.getRecipients().length <= 0 || o.getSender().equals(controller.getUsername())){
-			messageArea.insertIcon(o.getImage());
+			Image image = o.getImage().getImage().getScaledInstance(320, 210,
+					java.awt.Image.SCALE_SMOOTH);
+			JLabel label = new JLabel(new ImageIcon(image));
+			StyleConstants.setComponent(imgStyle, label);
+			try{
+				doc.insertString(doc.getLength(), "ignored text", imgStyle);
+				doc.insertString(doc.getLength(), "\n", null);
+			} catch(BadLocationException e) {
+				e.printStackTrace();
+			}
 			
 		}else{
 			String[] arr = o.getRecipients();
@@ -108,10 +117,13 @@ public class Viewer extends JPanel implements ActionListener, KeyListener{
 					Image image = o.getImage().getImage().getScaledInstance(320, 210,
 							java.awt.Image.SCALE_SMOOTH);
 					ImageIcon newImage = new ImageIcon(image);
+					JLabel label = new JLabel(newImage);
 					StyleConstants.setIcon(imgStyle, newImage);
 					try{
+						System.out.println("bildskrivssut");
 					doc.insertString(doc.getLength(), "ignored text", imgStyle);
 					doc.insertString(doc.getLength(), "\n", null);
+					System.out.println("bildskrivssut");
 					doc.insertString(doc.getLength(), "\n", null);
 					} catch(BadLocationException e) {
 						e.printStackTrace();
