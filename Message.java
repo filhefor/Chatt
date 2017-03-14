@@ -29,6 +29,7 @@ public class Message implements Serializable{
 	
 	public Message(String[] usernameList) {
 		this.usernameList = usernameList;
+		this.recipients = new String[0];
 		this.type = "usernameList";
 	}
 	

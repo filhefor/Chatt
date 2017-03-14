@@ -20,6 +20,7 @@ public class Viewer extends JPanel implements ActionListener, KeyListener{
 	
 	private ClientController controller;
 	private JTextField messageInput = new JTextField();
+	private JTextField recipientsInput = new JTextField();
 	private StyledDocument doc = new DefaultStyledDocument();
 	private Style imgStyle = doc.addStyle("imgStyle", null);;
 	private JTextPane messageArea = new JTextPane(doc);	
@@ -48,18 +49,21 @@ public class Viewer extends JPanel implements ActionListener, KeyListener{
 		imageButton.setPreferredSize(new Dimension(130,35));
 
 		btnPanel.setPreferredSize(new Dimension(170,100));
-		messageInput.setPreferredSize(new Dimension(515, 100));
+		messageInput.setPreferredSize(new Dimension(400, 100));
+		recipientsInput.setPreferredSize(new Dimension(75,100));
 		scrollPane.setPreferredSize(new Dimension(510,480));
 		connectedUsers.setPreferredSize(new Dimension(150,480));
 		
 		connectedUsers.setBorder(BorderFactory.createLineBorder(Color.BLACK));
 		scrollPane.setBorder(BorderFactory.createLineBorder(Color.BLACK));
+		recipientsInput.setBorder(BorderFactory.createLineBorder(Color.BLACK));
 		messageInput.setBorder(BorderFactory.createLineBorder(Color.BLACK));
 		
 		btnPanel.add(imageButton, BorderLayout.NORTH);
 		btnPanel.add(sendButton, BorderLayout.SOUTH);
 		panelWest.add(connectedUsers, BorderLayout.CENTER);
 		panelCenter.add(scrollPane, BorderLayout.CENTER);
+		panelSouth.add(recipientsInput, BorderLayout.WEST);
 		panelSouth.add(messageInput, BorderLayout.CENTER);
 		panelSouth.add(btnPanel, BorderLayout.EAST);
     
@@ -80,56 +84,22 @@ public class Viewer extends JPanel implements ActionListener, KeyListener{
 
 	}
 	
-	public void updateChatText(Message o){
+	public void updateChatText(String username, String message){
 		try{
-		if(o.getRecipients().length <= 0 || o.getSender().equals(controller.getUsername())){
-//			messageArea.append(o.getSender() + ": " + o.getMessage() + "\n");
-			doc.insertString(doc.getLength(), o.getSender() + ": " +o.getMessage() + "\n", null);
-		}else{
-			String[] arr = o.getRecipients();
-			for(int i = 0; i < arr.length; i++){
-				if(arr[i].equals(controller.getUsername())){
-					doc.insertString(doc.getLength(), o.getMessage(), null);
-				}
-			}
-		}
+			doc.insertString(doc.getLength(), username + ": " + message + "\n", null);
 		}catch(BadLocationException e) {}
 		
 	}
 	
-	public void updateChatImage(Message o) {
-		if(o.getRecipients().length <= 0 || o.getSender().equals(controller.getUsername())){
-			Image image = o.getImage().getImage().getScaledInstance(320, 210,
-					java.awt.Image.SCALE_SMOOTH);
-			JLabel label = new JLabel(new ImageIcon(image));
-			StyleConstants.setComponent(imgStyle, label);
-			try{
-				doc.insertString(doc.getLength(), "ignored text", imgStyle);
-				doc.insertString(doc.getLength(), "\n", null);
-			} catch(BadLocationException e) {
-				e.printStackTrace();
-			}
-			
-		}else{
-			String[] arr = o.getRecipients();
-			for(int i = 0; i < arr.length; i++){
-				if(arr[i].equals(controller.getUsername())){
-					Image image = o.getImage().getImage().getScaledInstance(320, 210,
-							java.awt.Image.SCALE_SMOOTH);
-					ImageIcon newImage = new ImageIcon(image);
-					JLabel label = new JLabel(newImage);
-					StyleConstants.setIcon(imgStyle, newImage);
-					try{
-						System.out.println("bildskrivssut");
-					doc.insertString(doc.getLength(), "ignored text", imgStyle);
-					doc.insertString(doc.getLength(), "\n", null);
-					System.out.println("bildskrivssut");
-					doc.insertString(doc.getLength(), "\n", null);
-					} catch(BadLocationException e) {
-						e.printStackTrace();
-					}
-				}
-			}
+	public void updateChatImage(String username, JLabel imageLbl) {
+		
+		try{
+			StyleConstants.setComponent(imgStyle, imageLbl);
+			doc.insertString(doc.getLength(), username, null);
+			doc.insertString(doc.getLength(), "ignored text", imgStyle);
+			doc.insertString(doc.getLength(), "\n", null);
+		} catch(BadLocationException e) {
+			e.printStackTrace();
 		}
 	}
 
@@ -137,7 +107,6 @@ public class Viewer extends JPanel implements ActionListener, KeyListener{
 	public void updateUsers(String[] strings){
 		connectedUsers.setText("Aktiva användare:\n");
 		for(int i = 0; i < strings.length; i++) {
-		System.out.println(strings[i]);
 		}
 		for(int i = 0; i < strings.length; i++){
 			connectedUsers.append(strings[i]+"\n");
@@ -150,8 +119,11 @@ public class Viewer extends JPanel implements ActionListener, KeyListener{
 		if(e.getSource() == sendButton) {
 			System.out.println("Du klickade på enter/skicka");
 //			controller.sendObject((Object)messageInput.getText());
-			String[] recipients = {};
-			controller.createTextMessage(recipients, messageInput.getText());
+			String recipients = recipientsInput.getText();
+			
+			
+			String[] recipientsarr = recipients.split("\\,");
+			controller.createTextMessage(recipientsarr, messageInput.getText());
 			messageInput.setText("");
 		}
 		if(e.getSource() == imageButton) {
@@ -189,10 +161,13 @@ public class Viewer extends JPanel implements ActionListener, KeyListener{
 		if(fileChooser.showOpenDialog(imageButton) == JFileChooser.APPROVE_OPTION) {
 //			
 		}
-		String[] arr = {};
+		String recipients = recipientsInput.getText();
+		
+		
+		String[] recipientsarr = recipients.split("\\,");
 		
 		image = new ImageIcon(fileChooser.getSelectedFile().getAbsolutePath());
-		controller.createImageMessage(arr,image);
+		controller.createImageMessage(recipientsarr,image);
 		System.out.println(fileChooser.getSelectedFile().getAbsolutePath());
 		
 	}

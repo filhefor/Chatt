@@ -4,16 +4,22 @@ import java.io.*;
 import java.net.*;
 import java.util.ArrayList;
 import java.util.LinkedList;
+import java.util.logging.FileHandler;
+import java.util.logging.Logger;
 
 public class Server implements Runnable {
 
 	private ServerSocket serverSocket;
+	//logger
+	private Logger log;
+	private FileHandler fileHandler;
 	private Thread server = new Thread(this);
 	private boolean on = true;
 	private ArrayList<ClientHandler> list = new ArrayList<ClientHandler>();
 	private LinkedList<Message> messageList = new LinkedList<Message>();
 
 	public Server(int port) throws IOException {
+		startLog();
 		serverSocket = new ServerSocket(port);
 		server.start();
 
@@ -53,11 +59,12 @@ public class Server implements Runnable {
 	}
 
 	public void run() {
+		logHandler("New Session");
 		try {
 			while (on) {
 				Socket socket = serverSocket.accept();
 				ClientHandler newClient = new ClientHandler(socket);
-				System.out.println("ClientConnected");
+				System.out.println("Server up");
 				list.add(newClient);
 				newClient.start();
 			}
@@ -98,6 +105,7 @@ public class Server implements Runnable {
 					System.out.println(messageList.get(i));
 				}
 				System.out.println(username + " connected");
+				logHandler(username + " has connected");
 			} catch (IOException | ClassNotFoundException e) {
 			}
 		}
@@ -113,12 +121,19 @@ public class Server implements Runnable {
 				try {
 					newUser();
 					message = (Message)input.readObject();
-					System.out.println(message);
+					if(message.getType().equals("image")) {
+						logHandler(username + " has sent " + message.getImage());
+					} else 
+					{
+						logHandler(username + " has written " + message.getMessage());
+					}
+	
 					messageList.add(message);
 					sendMessage(message);
 				} catch (IOException e) {
 					close();
 					System.out.println(username + " kopplade ner");
+					logHandler(username + " has logged out");
 					try {
 						removeUser(username);
 					} catch (IOException e1) {
@@ -168,6 +183,18 @@ public class Server implements Runnable {
 			}
 		}
 
+	}
+	
+	private void startLog() {
+		try{
+			log = Logger.getLogger("New Log");
+			fileHandler = new FileHandler("/log.txt");
+			log.addHandler(fileHandler);
+		} catch ( Exception e) {}
+	}
+	
+	public void logHandler(String msg) {
+		log.info(msg + "\n");
 	}
 
 	public static void main(String[] args) throws IOException {
