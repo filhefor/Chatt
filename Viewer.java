@@ -17,7 +17,6 @@ import javax.swing.text.StyleConstants;
 import javax.swing.text.StyledDocument;
 
 public class Viewer extends JPanel implements ActionListener, KeyListener{
-	
 	private ClientController controller;
 	private JTextField messageInput = new JTextField();
 	private JTextField recipientsInput = new JTextField();
@@ -120,9 +119,12 @@ public class Viewer extends JPanel implements ActionListener, KeyListener{
 			System.out.println("Du klickade på enter/skicka");
 //			controller.sendObject((Object)messageInput.getText());
 			String recipients = recipientsInput.getText();
-			
-			
-			String[] recipientsarr = recipients.split("\\,");
+			System.out.println("recipients " + recipients);
+			String[] recipientsarr = recipientsarr = recipients.split(",");
+			if(recipientsarr[0].equals("")) {
+				recipientsarr = new String[0];
+			}
+			System.out.println("recipients arr " + recipientsarr.length);
 			controller.createTextMessage(recipientsarr, messageInput.getText());
 			messageInput.setText("");
 		}
@@ -164,7 +166,7 @@ public class Viewer extends JPanel implements ActionListener, KeyListener{
 		String recipients = recipientsInput.getText();
 		
 		
-		String[] recipientsarr = recipients.split("\\,");
+		String[] recipientsarr = recipients.split(",");
 		
 		image = new ImageIcon(fileChooser.getSelectedFile().getAbsolutePath());
 		controller.createImageMessage(recipientsarr,image);
