@@ -30,13 +30,11 @@ public class Client{
  * @param controller ClientController instance
  */
 	public Client(String ip, int port, String username, ClientController controller) {
-		System.out.println("Client konstruktor");
 		this.username = username;
 		this.ip = ip;
 		this.port = port;
 		this.controller = controller;
 		new ServerListener(ip, port);
-		// connect();
 	}
 	
 	/**
@@ -82,9 +80,6 @@ public class Client{
 					Date date = new Date();
 					message = (Message)input.readObject();
 					message.setClientRecieved(date.toString().substring(10, 19));
-					System.out.println(message + " från klient");
-					System.out.println(controller);
-					System.out.println(message.getUsernameList());
 					controller.updateChat(message);
 				} catch (IOException ioe) {
 
@@ -101,11 +96,8 @@ public class Client{
 	public void setObjectToSend(Message objectToSend) {
 		this.objectToSend = objectToSend;
 		try {
-			//System.out.println("objekt: "+this.objectToSend);
 			output.writeObject(objectToSend);
 			output.flush();
-
-			// objectToSend = null;
 		} catch (IOException ioe) {
 		}
 	}

@@ -134,14 +134,11 @@ public class Viewer extends JPanel implements ActionListener, KeyListener{
 	 */
 	public void actionPerformed(ActionEvent e) {
 		if(e.getSource() == sendButton) {
-			System.out.println("Du klickade på enter/skicka");
 			String recipients = recipientsInput.getText();
-			System.out.println("recipients " + recipients);
 			String[] recipientsarr = recipientsarr = recipients.split(",");
 			if(recipientsarr[0].equals("")) {
 				recipientsarr = new String[0];
 			}
-			System.out.println("recipients arr " + recipientsarr.length);
 			controller.createTextMessage(recipientsarr, messageInput.getText());
 			messageInput.setText("");
 		}

@@ -64,7 +64,7 @@ public class Server implements Runnable {
 	}
 
 	/**
-	 * method which add a new user to list
+	 * method which add a new user to list and send userlist to all clients
 	 * @throws IOException
 	 */
 	public synchronized void newUser() throws IOException {
