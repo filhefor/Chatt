@@ -54,6 +54,7 @@ public class ClientController {
 	public void updateChat(Message o) {
 		Message message = o;
 		boolean recieve = false;
+		
 		if(o.getRecipients().length <= 0 || o.getSender().equals(username)){
 			recieve = true;
 		}else{
@@ -70,7 +71,7 @@ public class ClientController {
 			viewer.updateUsers(message.getUsernameList());
 		}
 		if(message.getType().equals("message") && recieve == true) {
-			viewer.updateChatText(o.getSender(), message.getMessage());
+			viewer.updateChatText(message.getClientRecieved() + " - " +o.getSender(), " " + message.getMessage());
 		}
 		else if (message.getType().equals("image") && recieve == true ) {
 			Image image = o.getImage().getImage().getScaledInstance(320, 210,

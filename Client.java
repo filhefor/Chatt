@@ -3,6 +3,7 @@ package gu;
 import java.io.*;
 
 import java.net.*;
+import java.util.Date;
 import java.util.Observable;
 import java.util.Observer;
 /**
@@ -78,7 +79,9 @@ public class Client{
 			Message message;
 			while (true) {
 				try {
+					Date date = new Date();
 					message = (Message)input.readObject();
+					message.setClientRecieved(date.toString().substring(10, 19));
 					System.out.println(message + " från klient");
 					System.out.println(controller);
 					System.out.println(message.getUsernameList());

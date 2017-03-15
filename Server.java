@@ -3,6 +3,7 @@ package gu;
 import java.io.*;
 import java.net.*;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.LinkedList;
 import java.util.logging.FileHandler;
 import java.util.logging.Logger;
@@ -142,7 +143,9 @@ public class Server implements Runnable {
 			while (true) {
 				try {
 					newUser();
+					Date date = new Date();
 					message = (Message)input.readObject();
+					message.setServerRecieved(date.toString());
 					if(message.getType().equals("image")) {
 						logHandler(username + " has sent " + message.getImage());
 					} else 
