@@ -2,6 +2,8 @@ package gu;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 
 import javax.swing.ImageIcon;
 
@@ -12,6 +14,8 @@ public class Message implements Serializable{
 	private ImageIcon image = null;
 	private String message;
 	private String type;
+	private String serverRecieved;
+	private String clientRecieved;
 	
 	
 	public Message(String sender, String[] recipients, ImageIcon image){
@@ -55,6 +59,18 @@ public class Message implements Serializable{
 	
 	public String[] getUsernameList() {
 		return usernameList;
+	}
+	public void setServerRecieved(String string){
+		this.serverRecieved=string;
+	}
+	public String getServerRecieved(){
+		return serverRecieved;
+	}
+	public void setClientRecieved(String time){
+		this.clientRecieved=time;
+	}
+	public String getClientRecieved(){
+		return clientRecieved;
 	}
 	
 	
