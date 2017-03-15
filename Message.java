@@ -12,6 +12,7 @@ public class Message implements Serializable{
 	private ImageIcon image = null;
 	private String message;
 	private String type;
+
 	
 	
 	public Message(String sender, String[] recipients, ImageIcon image){

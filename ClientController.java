@@ -7,14 +7,21 @@ import java.util.ArrayList;
 import javax.swing.*;
 import javax.swing.text.BadLocationException;
 import javax.swing.text.StyleConstants;
-
+/**
+ *  ClientController is the Controller for client handles messages recieved and sent
+ * @author Lucas, Elias, David, John, Filip, Alexander
+ *
+ */
 
 public class ClientController {
 	private Client client;
 	private Viewer viewer = new Viewer(this);
 	private String username;
 
-
+	/**
+	 * Constructor which prompts a InputDialog to choose username.
+	 * Then starts client and connects to ip
+	 */
 	public ClientController() {
 		System.out.println("controller konstruktor");
 
@@ -23,7 +30,9 @@ public class ClientController {
 		client	 = new Client("127.0.0.1", 1337, username, this);
 		//client.getData();
 	}
-
+	/**
+	 * Method to show the GUI
+	 */
 	public void showGUI() {
 		SwingUtilities.invokeLater(new Runnable() {
 			public void run() {
@@ -37,7 +46,11 @@ public class ClientController {
 			}
 		});
 	}
-	
+	/**
+	 * Method that handles Message objects recieved from server.
+	 * Reads type and runs other methods after.
+	 * @param o Message to handle
+	 */
 	public void updateChat(Message o) {
 		Message message = o;
 		boolean recieve = false;
@@ -54,7 +67,7 @@ public class ClientController {
 		
 		System.out.println(recieve);
 		if(message.getType().equals("usernameList")) {
-			updateUsers(message.getUsernameList());
+			viewer.updateUsers(message.getUsernameList());
 		}
 		if(message.getType().equals("message") && recieve == true) {
 			viewer.updateChatText(o.getSender(), message.getMessage());
@@ -66,32 +79,35 @@ public class ClientController {
 			viewer.updateChatImage(o.getSender(), label);
 		}
     }
-	
-	public void updateUsers(String[] strings){
-		viewer.updateUsers(strings);
-	}
 
-
+	/** 
+	 *  runs Method in client which sends Message
+	 * @param o Which Message to send
+	 */
 	public void sendObject(Message o) {
-		client.setOkToSend(true);
 		client.setObjectToSend(o);
 
 	}
+	/**
+	 * Creates a Message with type Image
+	 * @param recipients which Recipients to recieve message
+	 * @param image Image to send
+	 */
 	public void createImageMessage(String[] recipients, ImageIcon image){
 		sendObject(new Message(username, recipients, image));
 	}
+	/**
+	 * Creates a MEssage with type Text
+	 * @param recipients which Recipients to recieve message
+	 * @param message messge to send
+	 */
 	public void createTextMessage(String[] recipients, String message){
 		sendObject(new Message(username,recipients,message));
 	}
-	
-	public String getUsername() {
-		return username;
-	}
-	
-	public void sendImage(String image) {
-		
-	}
-	
+	/**
+	 * Main method tha tstarts client
+	 * @param args
+	 */
 	public static void main(String[] args) {
 		new ClientController();
 	}
