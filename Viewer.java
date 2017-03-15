@@ -135,7 +135,6 @@ public class Viewer extends JPanel implements ActionListener, KeyListener{
 	public void actionPerformed(ActionEvent e) {
 		if(e.getSource() == sendButton) {
 			System.out.println("Du klickade på enter/skicka");
-//			controller.sendObject((Object)messageInput.getText());
 			String recipients = recipientsInput.getText();
 			System.out.println("recipients " + recipients);
 			String[] recipientsarr = recipientsarr = recipients.split(",");
@@ -182,8 +181,7 @@ public class Viewer extends JPanel implements ActionListener, KeyListener{
 		fileChooser.setDialogTitle("Välj bild");
 		fileChooser.setFileFilter(imageFilter);
 		
-		if(fileChooser.showOpenDialog(imageButton) == JFileChooser.APPROVE_OPTION) {
-//			
+		if(fileChooser.showOpenDialog(imageButton) == JFileChooser.APPROVE_OPTION) {		
 		}
 		String recipients = recipientsInput.getText();
 		String[] recipientsarr = recipients.split(",");

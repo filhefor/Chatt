@@ -53,27 +53,13 @@ public class ClientController {
 	 */
 	public void updateChat(Message o) {
 		Message message = o;
-		boolean recieve = false;
-		
-		if(o.getRecipients().length <= 0 || o.getSender().equals(username)){
-			recieve = true;
-		}else{
-			String[] arr = o.getRecipients();
-			for(int i = 0; i < arr.length; i++){
-				if(arr[i].equals(username)){
-					recieve = true;
-				}
-			}
-		}
-		
-		System.out.println(recieve);
 		if(message.getType().equals("usernameList")) {
 			viewer.updateUsers(message.getUsernameList());
 		}
-		if(message.getType().equals("message") && recieve == true) {
+		if(message.getType().equals("message")) {
 			viewer.updateChatText(message.getClientRecieved() + " - " +o.getSender(), " " + message.getMessage());
 		}
-		else if (message.getType().equals("image") && recieve == true ) {
+		else if (message.getType().equals("image")) {
 			Image image = o.getImage().getImage().getScaledInstance(320, 210,
 					java.awt.Image.SCALE_SMOOTH);
 			JLabel label = new JLabel(new ImageIcon(image));

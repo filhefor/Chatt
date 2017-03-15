@@ -15,7 +15,6 @@ import java.util.logging.Logger;
 public class Server implements Runnable {
 
 	private ServerSocket serverSocket;
-	//logger
 	private Logger log;
 	private FileHandler fileHandler;
 	private Thread server = new Thread(this);
@@ -183,11 +182,16 @@ public class Server implements Runnable {
 				return false;
 			}
 			try {
-				System.out.println(obj + "Hej");
-				output.writeObject(obj);
-				Message message = (Message) obj;
-				System.out.println(message.getUsernameList() + " i send till " + username);
-
+				if(obj.getRecipients().length <= 0 || obj.getSender().equals(username)){
+					output.writeObject(obj);
+				}else{
+					String[] arr = obj.getRecipients();
+					for(int i = 0; i < arr.length; i++){
+						if(arr[i].equals(username)){
+							output.writeObject(obj);
+						}
+					}
+				}
 				output.flush();
 			} catch (IOException e) {
 
