@@ -5,7 +5,11 @@ import java.io.*;
 import java.net.*;
 import java.util.Observable;
 import java.util.Observer;
-
+/**
+ * Client handles connections from and to the client.
+ * @author Lucas, Elias, David, John, Filip, Alexander
+ *
+ */
 public class Client{
 	private ClientController controller;
 	private String username;
@@ -16,7 +20,14 @@ public class Client{
 	private int port;
 	private ObjectOutputStream output;
 	private ObjectInputStream input;
-
+/**
+ * Client constructor that sets ip, port, username and a controller.
+ *  Also makes a new instance of serverListener
+ * @param ip ip to connect to
+ * @param port port to connect to
+ * @param username  Username that will be used
+ * @param controller ClientController instance
+ */
 	public Client(String ip, int port, String username, ClientController controller) {
 		System.out.println("Client konstruktor");
 		this.username = username;
@@ -26,20 +37,21 @@ public class Client{
 		new ServerListener(ip, port);
 		// connect();
 	}
-
-	public void setController(ClientController controller) {
-		this.controller = controller;
-	}
-
-	public void sendObject(Message o) {
-		objectToSend = o;
-	}
-
-
+	
+	/**
+	 * Inner class that handles the input and output streams in a seperate thread
+	 * @author Lucas, Elias, David, John, Filip, Alexander
+	 *
+	 */
 	private class ServerListener extends Thread {
 		private String ip;
 		private int port;
-
+		/**
+		 *  Constructor that sets ip and port and opens a new input and output stream.
+		 *  Also sends username to server.
+		 * @param ip ip to use
+		 * @param port port to use
+		 */
 		public ServerListener(String ip, int port) {
 			this.ip = ip;
 			this.port = port;
@@ -59,7 +71,9 @@ public class Client{
 			}
 			start();
 		}
-
+		/**
+		 * Method that recieves messages from server.
+		 */
 		public void run() {
 			Message message;
 			while (true) {
@@ -75,13 +89,12 @@ public class Client{
 
 				}
 			}
-    }
+		}
 	}
-
-	public Object getObjectToSend() {
-		return objectToSend;
-	}
-
+	/**
+	 * sends a Message to the server 
+	 * @param objectToSend Message to send
+	 */
 	public void setObjectToSend(Message objectToSend) {
 		this.objectToSend = objectToSend;
 		try {
@@ -91,16 +104,6 @@ public class Client{
 
 			// objectToSend = null;
 		} catch (IOException ioe) {
-
 		}
 	}
-
-	public boolean isOkToSend() {
-		return okToSend;
-	}
-
-	public void setOkToSend(boolean okToSend) {
-		this.okToSend = okToSend;
-	}
-
 }

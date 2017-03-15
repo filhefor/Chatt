@@ -6,7 +6,11 @@ import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.logging.FileHandler;
 import java.util.logging.Logger;
-
+/**
+ * Server that handles all connections
+ * @author Lucas, David, Alexander, Elias, Filip, John
+ *
+ */
 public class Server implements Runnable {
 
 	private ServerSocket serverSocket;
@@ -17,14 +21,21 @@ public class Server implements Runnable {
 	private boolean on = true;
 	private ArrayList<ClientHandler> list = new ArrayList<ClientHandler>();
 	private LinkedList<Message> messageList = new LinkedList<Message>();
-
+	/**
+	 * Constructor that starts logging then makes a new ServerSocket and starts server
+	 * @param port port to open server on
+	 * @throws IOException
+	 */
 	public Server(int port) throws IOException {
 		startLog();
 		serverSocket = new ServerSocket(port);
 		server.start();
 
 	}
-	
+	/**
+	 * Method which send messages to all clients in list 
+	 * @param obj Message to send
+	 */
 	public synchronized void sendMessage(Message obj) {
 		for(int i = 0; i < list.size(); i++) {
 			ClientHandler sendClient = list.get(i);
@@ -38,7 +49,11 @@ public class Server implements Runnable {
 			}
 		}
 	}
-	
+	/**
+	 * Method which removes a user from list
+	 * @param username username to remove
+	 * @throws IOException
+	 */
 	public void removeUser(String username) throws IOException {
 		for(int i = 0; i < list.size(); i++) {
 			if(list.get(i).username.equals(username)) {
@@ -48,7 +63,10 @@ public class Server implements Runnable {
 		}
 	}
 
-
+	/**
+	 * method which add a new user to list
+	 * @throws IOException
+	 */
 	public synchronized void newUser() throws IOException {
 		String[] usernames= new String[list.size()];
 		for(int i = 0; i < list.size(); i++) {
@@ -57,7 +75,9 @@ public class Server implements Runnable {
 		Message message = new Message(usernames);
 		sendMessage(message);
 	}
-
+	/**
+	 * Waits for new connection and then sets it up when there is one
+	 */
 	public void run() {
 		logHandler("New Session");
 		try {
@@ -81,7 +101,11 @@ public class Server implements Runnable {
 		} catch (IOException e) {
 	}
 	}
-
+	/**
+	 * inner class that handles a single connection each
+	 * @author Lucas, David, John, Filip, Alexander, Elias
+	 *
+	 */
 	private class ClientHandler extends Thread {
 		private Socket socket;
 		private ObjectInputStream input;
@@ -90,7 +114,10 @@ public class Server implements Runnable {
 		private String username;
 //		private String message;
 		private Message message;
-
+		/**
+		 * sets up connection and sets up the instance
+		 * @param socket what socket to use
+		 */
 		public ClientHandler(Socket socket) {
 			this.socket = socket;
 			try {
@@ -108,14 +135,10 @@ public class Server implements Runnable {
 			} catch (IOException | ClassNotFoundException e) {
 			}
 		}
-
+		/**
+		 * Waits for a message and then handles it when recieved
+		 */
 		public void run() {
-//			try {
-//				newUser();
-//			} catch (IOException e2) {
-//				// TODO Auto-generated catch block
-//				e2.printStackTrace();
-//			}
 			while (true) {
 				try {
 					newUser();
@@ -145,7 +168,12 @@ public class Server implements Runnable {
 				}
 			}
 		}
-		
+		/**
+		 * Sends message to client.
+		 * @param obj Message to send
+		 * @return False if client is disconnected true if connected
+		 * @throws IOException
+		 */
 		private synchronized boolean writeMessage(Message obj) throws IOException {
 			if(!socket.isConnected()) {
 				socket.close();
@@ -163,7 +191,9 @@ public class Server implements Runnable {
 			}
 			return true;
 		}
-
+		/**
+		 * closes connection safely
+		 */
 		private void close() {
 			try {
 				if (output != null)
@@ -183,15 +213,20 @@ public class Server implements Runnable {
 		}
 
 	}
-	
+	/**
+	 * Start logger
+	 */
 	private void startLog() {
 		try{
 			log = Logger.getLogger("New Log");
-			fileHandler = new FileHandler("/log.txt");
+			fileHandler = new FileHandler("C:/Users/Lucas/workspace/Gruppu2/log.txt");
 			log.addHandler(fileHandler);
 		} catch ( Exception e) {}
 	}
-	
+	/**
+	 * log messages
+	 * @param msg msg to log
+	 */
 	public void logHandler(String msg) {
 		log.info(msg + "\n");
 	}

@@ -15,7 +15,10 @@ import javax.swing.text.Document;
 import javax.swing.text.Style;
 import javax.swing.text.StyleConstants;
 import javax.swing.text.StyledDocument;
-
+/**
+ * Viewer class handles GUI
+ * @author Lucas, David, Alexander, FIlip, Elias, John
+ */
 public class Viewer extends JPanel implements ActionListener, KeyListener{
 	private ClientController controller;
 	private JTextField messageInput = new JTextField();
@@ -38,7 +41,10 @@ public class Viewer extends JPanel implements ActionListener, KeyListener{
 	private JFileChooser fileChooser = new JFileChooser();
 	private FileFilter imageFilter = new FileNameExtensionFilter("Image Files", ImageIO.getReaderFileSuffixes());
 	
-	
+	/**
+	 * Constructor adds to panels and add panels
+	 * @param controller ClientController to set
+	 */
 	public Viewer(ClientController controller){
 		this.controller = controller;
 		setPreferredSize(new Dimension(700,600));
@@ -82,16 +88,23 @@ public class Viewer extends JPanel implements ActionListener, KeyListener{
 		
 
 	}
-	
+	/**
+	 * updates JTextPane with text
+	 * @param username username to add to message
+	 * @param message message to add to JTextPane
+	 */
 	public void updateChatText(String username, String message){
 		try{
 			doc.insertString(doc.getLength(), username + ": " + message + "\n", null);
 		}catch(BadLocationException e) {}
 		
 	}
-	
+	/**
+	 * Updates JTextPane with image
+	 * @param username username to update
+	 * @param imageLbl image to update
+	 */
 	public void updateChatImage(String username, JLabel imageLbl) {
-		
 		try{
 			StyleConstants.setComponent(imgStyle, imageLbl);
 			doc.insertString(doc.getLength(), username, null);
@@ -102,7 +115,10 @@ public class Viewer extends JPanel implements ActionListener, KeyListener{
 		}
 	}
 
-	
+	/**
+	 * Updates users connected
+	 * @param strings users to add
+	 */
 	public void updateUsers(String[] strings){
 		connectedUsers.setText("Aktiva användare:\n");
 		for(int i = 0; i < strings.length; i++) {
@@ -113,7 +129,9 @@ public class Viewer extends JPanel implements ActionListener, KeyListener{
 		
 	}
 
-
+	/**
+	 * creates a Message with messageInput and recipients.
+	 */
 	public void actionPerformed(ActionEvent e) {
 		if(e.getSource() == sendButton) {
 			System.out.println("Du klickade på enter/skicka");
@@ -132,14 +150,16 @@ public class Viewer extends JPanel implements ActionListener, KeyListener{
 			fileChooser();
 		}
 	}
-	
+	/**
+	 * if Enter is pressed click sendbutton
+	 */
 	public void keyPressed(KeyEvent e){
 	    if(e.getKeyCode() == KeyEvent.VK_ENTER){
 	    e.consume();
 	    sendButton.doClick();
 	    }
 	
-}
+	}
 
 	@Override
 	public void keyReleased(KeyEvent e) {
@@ -152,7 +172,9 @@ public class Viewer extends JPanel implements ActionListener, KeyListener{
 		// TODO Auto-generated method stub
 		
 	}
-	
+	/**
+	 * Filechooser makes a Message with type image and sends to recipients
+	 */
 	public void fileChooser() {
 		ImageIcon image;
 		
@@ -164,10 +186,10 @@ public class Viewer extends JPanel implements ActionListener, KeyListener{
 //			
 		}
 		String recipients = recipientsInput.getText();
-		
-		
 		String[] recipientsarr = recipients.split(",");
-		
+		if(recipientsarr[0].equals("")) {
+			recipientsarr = new String[0];
+		}
 		image = new ImageIcon(fileChooser.getSelectedFile().getAbsolutePath());
 		controller.createImageMessage(recipientsarr,image);
 		System.out.println(fileChooser.getSelectedFile().getAbsolutePath());
