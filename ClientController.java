@@ -66,22 +66,13 @@ public class ClientController {
 			viewer.updateChatImage(o.getSender(), label);
 		}
     }
-
-	/** 
-	 *  runs Method in client which sends Message
-	 * @param o Which Message to send
-	 */
-	public void sendObject(Message o) {
-		client.setObjectToSend(o);
-
-	}
 	/**
 	 * Creates a Message with type Image
 	 * @param recipients which Recipients to recieve message
 	 * @param image Image to send
 	 */
 	public void createImageMessage(String[] recipients, ImageIcon image){
-		sendObject(new Message(username, recipients, image));
+		client.setObjectToSend(new Message(username, recipients, image));
 	}
 	/**
 	 * Creates a MEssage with type Text
@@ -89,7 +80,7 @@ public class ClientController {
 	 * @param message messge to send
 	 */
 	public void createTextMessage(String[] recipients, String message){
-		sendObject(new Message(username,recipients,message));
+		client.setObjectToSend(new Message(username,recipients,message));
 	}
 	/**
 	 * Main method tha tstarts client
